@@ -1,0 +1,24 @@
+services:
+    glavweb_uploader_dropzone.form.image_type:
+        class: Glavweb\UploaderDropzoneBundle\Form\ImageType
+        arguments: ["@router", "@doctrine", "@glavweb_uploader.uploader_manager", "@glavweb_uploader.util.media_structure"]
+        tags:
+            - { name: form.type, alias: Glavweb\UploaderDropzoneBundle\Form\ImageType }
+
+    glavweb_uploader_dropzone.form.image_collection_type:
+        class: Glavweb\UploaderDropzoneBundle\Form\ImageCollectionType
+        arguments: ["@router", "@doctrine", "@glavweb_uploader.uploader_manager", "@glavweb_uploader.util.media_structure"]
+        tags:
+            - { name: form.type, alias: Glavweb\UploaderDropzoneBundle\Form\ImageCollectionType }
+
+    glavweb_uploader_dropzone.form.video_type:
+        class: Glavweb\UploaderDropzoneBundle\Form\VideoType
+        arguments: ["@router", "@doctrine", "@glavweb_uploader.uploader_manager", "@glavweb_uploader.util.media_structure"]
+        tags:
+            - { name: form.type, alias: Glavweb\UploaderDropzoneBundle\Form\VideoType }
+
+    glavweb_uploader_dropzone.form.video_collection_type:
+        class: Glavweb\UploaderDropzoneBundle\Form\VideoCollectionType
+        arguments: ["@router", "@doctrine", "@glavweb_uploader.uploader_manager", "@glavweb_uploader.util.media_structure"]
+        tags:
+            - { name: form.type, alias: Glavweb\UploaderDropzoneBundle\Form\VideoCollectionType }

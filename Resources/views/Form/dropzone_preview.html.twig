@@ -1,0 +1,27 @@
+<div style="display: none" class="js-upload-preview-template-wrapper">
+    <div class="js-dropzone-file gwu-gallery-box-wr">
+        <!-- This is used as the file preview template -->
+
+        <div class="gwu-gallery-box">
+            <img data-dz-thumbnail class="gwu-gallery-box__img">
+            <div class="gwu-gallery-box__overlay">
+                <div class="gwu-dt">
+                    <div class="gwu-dtc">
+                        <button type="button" class="gwu-btn gwu-btn-video js-control-bar-edit-image">
+                            <span class="fa fa-pencil-square-o"></span>
+                            {{ 'dropzone_preview_edit'|trans }}
+                        </button>
+                        <button data-dz-remove class="gwu-btn gwu-btn-video">
+                            <span class="fa fa-times"></span>
+                            {{ 'dropzone_preview_remove'|trans }}
+                        </button>
+                        <div>
+                            <strong class="error text-danger" data-dz-errormessage></strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

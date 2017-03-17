@@ -1,0 +1,340 @@
+.splash-screen {
+    overflow: auto;
+    padding: 70px 0;
+}
+
+.gwu-btn {
+    height: 34px;
+    padding: 0 15px;
+    background-color: #ddd;
+    border: none;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.8);
+    cursor: pointer;
+}
+
+.gwu-btn:focus {
+    outline: none;
+}
+
+.gwu-btn-success {
+    background-color: #51bb64;
+    color: white;
+}
+
+.gwu-btn-success:hover {
+    opacity: 0.8;
+    transition: ease, 0.5s;
+}
+
+.gwu-btn-secondary:hover {
+    opacity: 0.8;
+    transition: ease, 0.5s;
+}
+
+.gwu-control {
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    box-sizing: border-box;
+}
+
+.gwu-control:focus {
+    outline: none;
+}
+
+.gwu-form-group {
+    margin-bottom: 20px;
+}
+
+.gwu-control-label {
+    font-size: 14px;
+}
+
+.gwu-textarea {
+    width: 100%;
+    max-width: 100%;
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #555;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #ccc;
+    border-radius: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+    -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+    -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+    box-sizing: border-box;
+}
+
+.gwu-input-group {
+    position: relative;
+    padding-right: 150px;
+}
+
+.gwu-input-group input {
+    width: 100%;
+    border-right: none;
+}
+
+.gwu-input-group button {
+    width: 100%;
+}
+
+.gwu-input-group-btn {
+    width: 150px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.gwu-upload-preview-wrapper {
+    overflow: hidden;
+    margin: 0 -5px;
+}
+
+.gwu-preview-wrapper-wr {
+    padding-top: 10px;
+}
+
+.gwu-container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.gwu-row {
+    overflow: hidden;
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.gwu-hr {
+    background-color: #e3e3e3;
+    height: 1px;
+    border: none;
+}
+
+.gwu-table {
+    width: 100%;
+}
+
+.gwu-tr:nth-child(2n) {
+    background-color: #ececec;
+}
+
+.gwu-td {
+    font-size: 14px;
+    padding: 3px 10px;
+}
+
+.dz-clickable {
+    cursor: pointer;
+}
+
+.gwu-gallery-box-list {
+    margin: 0 -5px;
+    overflow: hidden;
+}
+
+.gwu-gallery-box-wr {
+    padding: 0 5px 10px 5px;
+    float: left;
+    box-sizing: border-box;
+}
+
+.gwu-gallery-box {
+    display: block;
+    position: relative;
+    width: 100%;
+    max-height: 131px;
+    overflow: hidden;
+}
+
+.gwu-gallery-box_video {
+    max-height: 100%;
+    margin-bottom: 10px;
+}
+
+.gwu-gallery-box_video:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-image: url('images/play.png');
+    background-repeat: no-repeat;
+    background-position: 50%;
+    background-size: 30%;
+}
+
+.gwu-gallery-box > .gwu-gallery-box__overlay {
+    -webkit-transition: ease, 0.5s;
+    -moz-transition: ease, 0.5s;
+    -o-transition: ease, 0.5s;
+    transition: ease, 0.5s;
+}
+
+.gwu-gallery-box:hover > .gwu-gallery-box__overlay {
+    background-color: rgba(0,0,0,0.6);
+    -webkit-transition: ease, 0.5s;
+    -moz-transition: ease, 0.5s;
+    -o-transition: ease, 0.5s;
+    transition: ease, 0.5s;
+}
+
+.gwu-gallery-box:hover .gwu-btn-video {
+    -webkit-opacity: 1;
+    -moz-opacity: 1;
+    opacity: 1;
+    -webkit-transition: ease, 0.5s;
+    -moz-transition: ease, 0.5s;
+    -o-transition: ease, 0.5s;
+    transition: ease, 0.5s;
+}
+
+.gwu-gallery-box__img {
+    display: block;
+    width: 100%;
+}
+
+.gwu-gallery-box__overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0,0,0,0.2);
+}
+
+.gwu-gallery-box__overlay_dark {
+    background-color: rgba(0,0,0,0.9);
+}
+
+.gwu-gallery-upload-text {
+    color: white;
+    font-size: 16px;
+    text-align: center;
+}
+
+.gwu-btn-video {
+    margin: 0 auto;
+    -webkit-opacity: 0;
+    -moz-opacity: 0;
+    opacity: 0;
+    -webkit-transition: ease, 0.5s;
+    -moz-transition: ease, 0.5s;
+    -o-transition: ease, 0.5s;
+    transition: ease, 0.5s;
+    color: white;
+    font-size: 16px;
+    display: block;
+    border: none;
+    background-color: transparent;
+}
+
+.gwu-btn-video:hover {
+    color: rgba(255,255,255,0.7);
+}
+
+.gwu-btn-video:focus {
+    color: white;
+    outline: none;
+}
+
+.gwu-btn-video:focus:active {
+    color: white;
+    outline: none;
+}
+
+.gwu-dt {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.gwu-dtc {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.splash-screen-image {
+    max-width: 100%;
+}
+
+@media (min-width: 480px) {
+    .gwu-gallery-box-wr {
+        width: 50%;
+    }
+
+    .gwu-preview-wrapper-wr {
+        width: 50%;
+    }
+}
+
+@media (min-width: 768px) {
+    .gwu-gallery-box-wr {
+        width: 33.3%;
+    }
+
+    .gwu-container {
+        width: 750px;
+    }
+}
+
+@media (min-width: 992px) {
+    .gwu-container {
+        width: 970px;
+    }
+
+    .gwu-media-content {
+        width: 66.66666667%;
+        float: left;
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+        box-sizing: border-box;
+    }
+
+    .gwu-form-content {
+        width: 33.33333333%;
+        float: left;
+        position: relative;
+        min-height: 1px;
+        padding-right: 15px;
+        padding-left: 15px;
+        box-sizing: border-box;
+    }
+}
+
+@media (min-width: 1200px) {
+    .gwu-gallery-box-wr {
+        width: 25%;
+    }
+
+    .gwu-preview-wrapper-wr {
+        width: 40%;
+    }
+
+    .gwu-container {
+        width: 1170px;
+    }
+}

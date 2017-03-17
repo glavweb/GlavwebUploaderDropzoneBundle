@@ -9,15 +9,21 @@
  * file that was distributed with this source code.
  */
 
-namespace Glavweb\UploaderDropzoneBundle;
-
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace Glavweb\UploaderDropzoneBundle\Form;
 
 /**
- * Class GlavwebUploaderDropzoneBundle
+ * Class ImageCollectionType
  *
  * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
-class GlavwebUploaderDropzoneBundle extends Bundle
-{}
+class ImageCollectionType extends AbstractMediaCollectionType
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function getBlockPrefix()
+    {
+        return 'cms_media_image_collection';
+    }
+}

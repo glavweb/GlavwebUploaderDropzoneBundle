@@ -32,10 +32,8 @@ To add resources to a twig confinuration.
 ```
 twig:
     ...
-    form:
-        resources:
-            ...
-            - 'GlavwebUploaderDropzoneBundle:Form:fields.html.twig'
+    form_themes:
+        - 'GlavwebUploaderDropzoneBundle:Form:fields.html.twig'
 
 ```
 
@@ -46,11 +44,16 @@ To add resources to a twig layout
 {% block javascripts %}
 
     ...
-    
-    <script src="{{ asset('bundles/glavwebuploaderdropzone/js/jquery.plainmodal.min.js') }}"></script>
-    <script src="{{ asset('bundles/glavwebuploaderdropzone/js/dropzone.js') }}"></script>
-    <script src="{{ asset('bundles/glavwebuploaderdropzone/js/glavwebUploaderDropzone.js') }}"></script>
-    
+
+        <script src="https://code.jquery.com/jquery-1.12.4.min.js"
+                integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+                crossorigin="anonymous"></script>
+
+        <script src="{{ asset('bundles/glavwebuploaderdropzone/splashscreen/jquery.splashscreen.js') }}"></script>
+        <script src="{{ asset('bundles/glavwebuploaderdropzone/dropzone.js') }}"></script>
+        <script src="{{ asset('bundles/glavwebuploaderdropzone/jquery.dropzone_uploader.js') }}"></script>
+        <script src="{{ asset('bundles/glavwebuploaderdropzone/fields.js') }}"></script>
+
     ...
     
 {% endblock %}
@@ -60,16 +63,14 @@ To add resources to a twig layout
 
     ...
     
-    <link rel="stylesheet" href="{{ asset('bundles/glavwebuploaderdropzone/css/dropzone.css') }}">
-    <link rel="stylesheet" href="{{ asset('bundles/glavwebuploaderdropzone/css/style.css') }}">
+    <link  href="{{ asset('bundles/glavwebuploaderdropzone/splashscreen/splashscreen.css') }}" rel="stylesheet">
+    <link  href="{{ asset('bundles/glavwebuploaderdropzone/fields.css') }}" rel="stylesheet">
     
     ...
     
 {% endblock %}
 
 ```
-
-
 
 ### Execute "assets:install".
 
@@ -81,4 +82,43 @@ for Symfony3:
 
 ```
 php bin/console assets:install
+```
+
+### Basic Usage.
+
+You can create form, as this:
+
+```
+use Glavweb\UploaderDropzoneBundle\Form\ImageCollectionType;
+use Glavweb\UploaderDropzoneBundle\Form\ImageType;
+use Glavweb\UploaderDropzoneBundle\Form\VideoCollectionType;
+use Glavweb\UploaderDropzoneBundle\Form\VideoType;
+
+$form = $this->createFormBuilder($product)
+    ->add('name', null, ['label' => 'name'])
+
+    ->add('titleImage', ImageType::class, [
+        'label'            => 'Image',
+        'context'          => 'image',
+        'thumbnail_filter' => 'image'
+    ])
+
+    ->add('imageGalleryItems', ImageCollectionType::class, [
+        'label'            => 'Image Gallery',
+        'context'          => 'image_gallery',
+        'thumbnail_filter' => 'image_gallery'
+    ])
+
+    ->add('titleVideo', VideoType::class, [
+        'label'            => 'Video',
+        'context'          => 'video',
+        'thumbnail_filter' => 'video'
+    ])
+
+    ->add('videoGalleryItems', VideoCollectionType::class, [
+        'label'            => 'Video Gallery',
+        'context'          => 'video',
+        'thumbnail_filter' => 'video_gallery'
+    ])
+->getForm();
 ```
