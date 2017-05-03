@@ -61,20 +61,23 @@ class AbstractMediaCollectionType extends AbstractMediaType
     {
         parent::buildView($view, $form, $options);
 
-        $mediaSecuredIds  = [];
-        $structuredMedias = [];
+        $inValue = $view->vars['value'];
+        $medias  = [];
+        if ($inValue instanceof Collection) {
+            $medias = $inValue->toArray();
 
-        $mediaCollection = $view->vars['value'];
-        if ($mediaCollection instanceof Collection) {
-            $structuredMedias = $this->mediaStructure->getStructure($mediaCollection->toArray(), $options['thumbnail_filter'], true);
-            $mediaSecuredIds  = array_map(function (array $structuredMedia) {
-                return $structuredMedia['id'];
-            }, $structuredMedias);
+        } elseif (is_array($inValue)) {
+            $medias = $inValue;
         }
+
+        $structuredMedias = $this->mediaStructure->getStructure($medias, $options['thumbnail_filter'], true);
+        $mediaSecuredIds  = array_map(function (array $structuredMedia) {
+            return $structuredMedia['id'];
+        }, $structuredMedias);
 
         $view->vars['value'] = $structuredMedias;
 
-        // Переименовать в value
+        // @todo rename to "value"
         $view->vars['mediaData'] = [
             'medias'     => $mediaSecuredIds,
             'request_id' => $view->vars['requestId']

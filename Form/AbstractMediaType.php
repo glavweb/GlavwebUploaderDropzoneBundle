@@ -75,22 +75,6 @@ abstract class AbstractMediaType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        // Кропалка
-
-        // Сортировка
-
-        // Переводы
-
-        // Проверка ролей
-
-
-        // Пример кастомной загрузке из антонов сад
-
-        // В примере так же привести страницу просмотра продукта
-
-        // Добавить фикстуры в пример
-
-
         $requestId = $options['requestId'] ?: $this->generateRequestId($view);
 
         $view->vars['requestId'] = $requestId;
