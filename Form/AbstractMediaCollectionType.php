@@ -41,10 +41,23 @@ class AbstractMediaCollectionType extends AbstractMediaType
                 $mediaData = json_decode($mediaDataJson, true);
                 $medias = $this->getMedias($mediaData['medias']);
 
+                $mediaIds = array_map(function (MediaInterface $media) {
+                    return $media->getId();
+                }, $medias);
+
                 $uploadedMedias = $this->uploaderManager->handleUpload($mediaData['request_id']);
+                $uploadedMedias = array_filter($uploadedMedias, function ($uploadedMedia) use ($mediaIds) {
+                    return !in_array($uploadedMedia->getId(), $mediaIds);
+                });
 
                 if ($uploadedMedias) {
                     $medias = array_merge($medias, $uploadedMedias);
+                }
+
+                $position = 0;
+                foreach ($medias as $media) {
+                    $media->setPosition($position);
+                    $position++;
                 }
 
                 return $this->filterRemovedMedias($medias);

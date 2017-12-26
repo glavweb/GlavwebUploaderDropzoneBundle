@@ -56,7 +56,7 @@
     {% set files = value is not empty ? value : {} %}
 
     <div id="js-image-collection-form-type-{{ id }}" class="js-image-collection-form-type">
-        <div class="js-upload-preview-wrapper gwu-upload-preview-wrapper">
+        <div class="js-upload-preview-wrapper gwu-upload-preview-wrapper" id="js-upload-preview-wrapper-{{ requestId }}">
 
             <div class="gwu-gallery-box-wr">
                 <div class="gwu-gallery-box">
@@ -103,6 +103,15 @@
                     dictMaxFilesExceeded: "{{ 'uploader_dict_max_files_exceeded'|trans }}",
                     serverError:          "{{ 'uploader_server_error'|trans }}"
                 }
+            }, function (self) {
+                var previewWrapper = document.getElementById('js-upload-preview-wrapper-{{ requestId }}');
+
+                Sortable.create(previewWrapper, {
+                    draggable: '.js-dropzone-file',
+                    onSort: function (event) {
+                        self.updateMediasInFieldValue();
+                    }
+                });
             });
         })(jQuery);
     </script>
@@ -189,7 +198,7 @@
         <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
 
         <div class="gwu-gallery-box-list " style="padding-top: 10px;">
-            <div class="js-preview-wrapper"></div>
+            <div class="js-preview-wrapper" id="js-preview-wrapper-{{ requestId }}"></div>
 
             {# Template #}
             <div class="js-preview-template" style="display: none">
@@ -243,6 +252,15 @@
                 messages : {
                     uploadVideoLoadingText: "{{ 'download_video_button_loading'|trans }}"
                 }
+            }, function (self) {
+                var previewWrapper = document.getElementById('js-preview-wrapper-{{ requestId }}');
+
+                Sortable.create(previewWrapper, {
+                    draggable: '.js-preview',
+                    onSort: function (event) {
+                        self.updateMediasInFieldValue();
+                    }
+                });
             });
         })(jQuery);
 

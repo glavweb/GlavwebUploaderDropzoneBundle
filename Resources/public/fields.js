@@ -59,6 +59,24 @@
     };
 
     /**
+     * Get media IDs from preview objects
+     *
+     * @return {Array}
+     */
+    BaseMediaFormType.prototype.getMediaIdsFromPreviews = function ($previews)
+    {
+        var self          = this;
+        var updatedMedias = [];
+
+        $previews.each(function (key, preview) {
+            var data = self.getPreviewData($(preview));
+            updatedMedias.push(data['id']);
+        });
+
+        return updatedMedias;
+    };
+
+    /**
      * Constructor
      *
      * @param {jQuery} $wrapper
@@ -136,8 +154,9 @@
      *
      * @param {jQuery} $wrapper
      * @param {object} options
+     * @param {function} callback
      */
-    function ImageFormType($wrapper, options)
+    function ImageFormType($wrapper, options, callback)
     {
         BaseImageFormType.apply(this, arguments);
 
@@ -149,6 +168,10 @@
         this.isShowStoredFile = null;
 
         this.dropzoneUploader = this.initDropzoneUploader(options.uploadUrl, options.deleteUrl, options.file);
+
+        if (callback !== undefined) {
+            callback(this);
+        }
     }
 
     // Extends from BaseImageFormType
@@ -240,8 +263,9 @@
      *
      * @param {jQuery} $wrapper
      * @param {object} options
+     * @param {function} callback
      */
-    function ImageCollectionFormType($wrapper, options)
+    function ImageCollectionFormType($wrapper, options, callback)
     {
         BaseImageFormType.apply(this, arguments);
 
@@ -250,6 +274,10 @@
         }, this.options);
 
         this.dropzoneUploader = this.initDropzoneUploader(options.uploadUrl, options.deleteUrl, options.files);
+
+        if (callback !== undefined) {
+            callback(this);
+        }
     }
 
     // Extends BaseImageFormType
@@ -278,6 +306,8 @@
             }
         });
 
+        var $previewElement;
+
         $.each(files, function (key, fileItem) {
             var mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
 
@@ -292,31 +322,56 @@
             // Set data for preview
             $previewElement = $(file.previewElement);
             self.setDataForPreview($previewElement, response);
+            self.updateMediasInFieldValue();
+        });
+
+        // On remove file
+        dropzone.on("removedfile", function(file, response) {
+            self.updateMediasInFieldValue();
         });
 
         return dropzoneUploader;
     };
 
     /**
-     * Init plugin
+     * Update medias in field value
      *
-     * @param {object} options
-     * @returns {ImageFormType}
+     * @return void
      */
-    $.fn.imageFormType = function (options)
+    ImageCollectionFormType.prototype.updateMediasInFieldValue = function ()
     {
-        return new ImageFormType(this, options);
+        var self = this;
+        var $previews = this.ui.uploadPreviewWrapper.find('.js-dropzone-file');
+        var updatedMedias = this.getMediaIdsFromPreviews($previews);
+
+        // update field value
+        var fieldValueData = $.parseJSON(this.ui.fieldValue.val());
+        fieldValueData.medias = updatedMedias;
+        this.ui.fieldValue.val(JSON.stringify(fieldValueData));
     };
 
     /**
      * Init plugin
      *
      * @param {object} options
+     * @param {function} callback
+     * @returns {ImageFormType}
+     */
+    $.fn.imageFormType = function (options, callback)
+    {
+        return new ImageFormType(this, options, callback);
+    };
+
+    /**
+     * Init plugin
+     *
+     * @param {object} options
+     * @param {function} callback
      * @returns {ImageCollectionFormType}
      */
-    $.fn.imageCollectionFormType = function (options)
+    $.fn.imageCollectionFormType = function (options, callback)
     {
-        return new ImageCollectionFormType(this, options);
+        return new ImageCollectionFormType(this, options, callback);
     };
 
     /**
@@ -343,6 +398,7 @@
         this.ui = {
             previewWrapper : $wrapper.find('.js-preview-wrapper'),
             uploadInput    : $wrapper.find('.js-upload-input'),
+            fieldValue     : $wrapper.find('.js-field-value'),
             controlBar : {
                 uploadVideo  : $wrapper.find('.js-control-bar-upload-video'),
                 editButton   : $wrapper.find('.js-control-bar-edit'),
@@ -419,7 +475,7 @@
     /**
      * Add medias
      *
-     * @param {array} medias
+     * @param {Array} medias
      */
     BaseVideoFormType.prototype.addMedias = function (medias)
     {
@@ -626,8 +682,9 @@
      *
      * @param {jQuery} $wrapper
      * @param {object} options
+     * @param {function} callback
      */
-    function VideoFormType($wrapper, options)
+    function VideoFormType($wrapper, options, callback)
     {
         BaseVideoFormType.apply(this, arguments);
 
@@ -636,6 +693,10 @@
         }, this.options);
 
         this.addMedia(this.options.media, true);
+
+        if (callback !== undefined) {
+            callback(this);
+        }
     }
 
     // Extends from BaseImageFormType
@@ -680,8 +741,9 @@
      *
      * @param {jQuery} $wrapper
      * @param {object} options
+     * @param {function} callback
      */
-    function VideoCollectionFormType($wrapper, options)
+    function VideoCollectionFormType($wrapper, options, callback)
     {
         BaseVideoFormType.apply(this, arguments);
 
@@ -690,12 +752,15 @@
         }, this.options);
 
         this.addMedias(this.options.medias);
+
+        if (callback !== undefined) {
+            callback(this);
+        }
     }
 
     // Extends from BaseImageFormType
     VideoCollectionFormType.prototype = Object.create(BaseVideoFormType.prototype);
     VideoCollectionFormType.prototype.constructor = VideoCollectionFormType;
-
 
     /**
      * On upload success
@@ -708,6 +773,7 @@
         this.clearUploadLink();
 
         this.addMedia(response);
+        this.updateMediasInFieldValue();
     };
 
     /**
@@ -719,28 +785,48 @@
     VideoCollectionFormType.prototype.onDeleteSuccess = function (response, preview)
     {
         preview.remove();
+        this.updateMediasInFieldValue();
+    };
+
+    /**
+     * Update medias in field value
+     *
+     * @return void
+     */
+    VideoCollectionFormType.prototype.updateMediasInFieldValue = function ()
+    {
+        var self = this;
+        var $previews = this.ui.previewWrapper.find('.js-preview');
+        var updatedMedias = this.getMediaIdsFromPreviews($previews);
+
+        // update field value
+        var fieldValueData = $.parseJSON(this.ui.fieldValue.val());
+        fieldValueData.medias = updatedMedias;
+        this.ui.fieldValue.val(JSON.stringify(fieldValueData));
     };
 
     /**
      * Init plugin
      *
      * @param {object} options
+     * @param {function} callback
      * @returns {VideoFormType}
      */
-    $.fn.videoFormType = function (options)
+    $.fn.videoFormType = function (options, callback)
     {
-        return new VideoFormType(this, options);
+        return new VideoFormType(this, options, callback);
     };
 
     /**
      * Init plugin
      *
      * @param {object} options
+     * @param {function} callback
      * @returns {VideoFormType}
      */
-    $.fn.videoCollectionFormType = function (options)
+    $.fn.videoCollectionFormType = function (options, callback)
     {
-        return new VideoCollectionFormType(this, options);
+        return new VideoCollectionFormType(this, options, callback);
     };
 })(jQuery);
 
