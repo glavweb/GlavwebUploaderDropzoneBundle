@@ -4,6 +4,8 @@ download_video_button_loading: Загрузка...
 download_video_placeholder: Вставтье ссылку на видео с YouTube
 video_edit: Редактировать
 video_remove: Удалить
+download_file_button: Загрузить файл
+download_file_loading: Загрузка...
 
 dropzone_preview_edit: Редактировать
 dropzone_preview_remove: Удалить

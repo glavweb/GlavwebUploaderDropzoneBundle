@@ -266,3 +266,115 @@
 
     </script>
 {% endblock %}
+
+{% block media_file_widget %}
+    {% set file = value is not empty ? value : {} %}
+
+    <div id="js-file-form-type-{{ id }}" class="js-file-form-type gwu-form-control">
+        <div class="js-upload-file-wrapper gwu-form-inner">
+            <div class="js-control-bar-upload-file gwu-form-upload-file">{{ 'download_file_button'|trans }}</div>
+        </div>
+
+        <div class="js-preview-wrapper" id="js-preview-wrapper-{{ requestId }}"></div>
+
+        {# Dropzone template #}
+        <div style="display: none" class="js-preview-template-wrapper">
+            <div class="js-dropzone-file" style="display: none">
+                <!-- This is used as the file preview template -->
+
+                <div class="gwu-form-file">
+                    <span class="js-file-name gwu-form-file-name">{{ 'download_file_loading'|trans }}</span>
+
+                    <button type="button" class="gwu-btn js-control-bar-edit-file">
+                        <span class="fa fa-pencil-square-o"></span>
+                        {{ 'dropzone_preview_edit'|trans }}
+                    </button>
+
+                    <button data-dz-remove class="gwu-btn">
+                        <span class="fa fa-times"></span>
+                        {{ 'dropzone_preview_remove'|trans }}
+                    </button>
+
+                    <div>
+                        <strong class="error text-danger" data-dz-errormessage></strong>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        {# Splash screen template #}
+        <div class="js-splash-screen-file-template" style="display:none;">
+            <div class="js-splash-screen-content gwu-container">
+                <div class="gwu-row">
+                    <div class="gwu-form-content">
+                        <div>
+                            <div class="gwu-form-group">
+                                <label class="gwu-control-label" for="">
+                                    {{ 'splash_screen_name'|trans }}
+                                </label>
+
+                                <div>
+                                    <input data-form-name class="gwu-control" type="text" name="name" value="">
+                                </div>
+                            </div>
+
+                            <div class="gwu-form-group">
+                                <label class="gwu-control-label" for="">
+                                    {{ 'splash_screen_description'|trans }}
+                                </label>
+
+                                <div>
+                                    <textarea data-form-description class="gwu-textarea" name="description" rows="4"></textarea>
+                                </div>
+                            </div>
+                            <table class="gwu-table">
+                                <tr class="gwu-tr">
+                                    <td class="gwu-td">{{ 'splash_screen_media_type'|trans }}: </td>
+                                    <td class="gwu-td"><span data-table-content-type></span></td>
+                                </tr>
+                                <tr class="gwu-tr">
+                                    <td class="gwu-td">{{ 'splash_screen_media_size'|trans }}: </td>
+                                    <td class="gwu-td"><span data-table-content-size></span></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <hr class="glavweb-hr">
+                <button data-save-button type="button" class="gwu-btn gwu-btn-success">{{ 'splash_screen_save_button'|trans }}</button>
+            </div>
+        </div>
+
+        <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control" />
+    </div>
+
+    <script>
+        (function ($) {
+            var file = {% if file is not empty %}{{ file|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
+            var $wrapper                = $('#js-file-form-type-{{ id }}');
+            var splashScreen            = $('body').splashScreen();
+            var editMediaContentFactory = $wrapper.find('.js-splash-screen-file-template').editMediaContentFactory({
+                requestId : "{{ requestId }}",
+                editUrl   : "{{ editUrl }}",
+                messages : {
+                    saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
+                }
+            });
+
+            $wrapper.fileFormType({
+                requestId               : "{{ requestId }}",
+                uploadUrl               : "{{ uploadUrl }}",
+                deleteUrl               : "{{ deleteUrl }}",
+                file                    : file,
+                splashScreen            : splashScreen,
+                editMediaContentFactory : editMediaContentFactory,
+                messages: {
+                    dictMaxFilesExceeded: "{{ 'uploader_dict_max_files_exceeded'|trans }}",
+                    serverError:          "{{ 'uploader_server_error'|trans }}"
+                }
+            });
+        })(jQuery);
+    </script>
+
+{% endblock %}

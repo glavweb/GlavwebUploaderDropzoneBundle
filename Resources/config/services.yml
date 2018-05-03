@@ -22,3 +22,9 @@ services:
         arguments: ["@router", "@doctrine", "@glavweb_uploader.uploader_manager", "@glavweb_uploader.util.media_structure"]
         tags:
             - { name: form.type, alias: Glavweb\UploaderDropzoneBundle\Form\VideoCollectionType }
+
+    glavweb_uploader_dropzone.form.file_type:
+        class: Glavweb\UploaderDropzoneBundle\Form\FileType
+        arguments: ["@router", "@doctrine", "@glavweb_uploader.uploader_manager", "@glavweb_uploader.util.media_structure"]
+        tags:
+            - { name: form.type, alias: Glavweb\UploaderDropzoneBundle\Form\FileType }

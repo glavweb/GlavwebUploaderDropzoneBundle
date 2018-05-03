@@ -94,7 +94,7 @@
 
         this.dropzone.emit('addedfile', mockFile);
 
-        if (thumbnailPath !== undefined) {
+        if (thumbnailPath) {
             this.dropzone.emit("thumbnail", mockFile, thumbnailPath);
         }
 

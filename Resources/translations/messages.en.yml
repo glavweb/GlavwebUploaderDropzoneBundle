@@ -4,6 +4,8 @@ download_video_button_loading: Uploading...
 download_video_placeholder: Insert link to YouTube video
 video_edit: Edit
 video_remove: Remove
+download_file_button: Download file
+download_file_loading: Uploading...
 
 dropzone_preview_edit: Edit
 dropzone_preview_remove: Remove

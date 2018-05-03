@@ -17,6 +17,10 @@
     outline: none;
 }
 
+.gwu-btn:hover {
+    background-color: #ccc;
+}
+
 .gwu-btn-success {
     background-color: #51bb64;
     color: white;
@@ -264,6 +268,35 @@
 .gwu-btn-video:focus:active {
     color: white;
     outline: none;
+}
+
+.gwu-form-control {
+    width: 100%;
+    height: 100%;
+}
+
+.gwu-form-inner {
+    width: 100%;
+    height: 100%;
+    border: 1px dashed #ccc;
+    color: #555;
+}
+
+.gwu-form-upload-file {
+    width: 100%;
+    height: 100%;
+    padding: 30px 20px;
+    text-align: center;
+    transition: background-color ease .35s;
+}
+
+.gwu-form-upload-file:hover {
+    background-color: #f5f5f5;
+}
+
+.gwu-form-file-name {
+    margin: 0 12px;
+    display: inline-block;
 }
 
 .gwu-dt {
