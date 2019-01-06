@@ -18,8 +18,8 @@
             </div>
         </div>
 
-        {% include 'GlavwebUploaderDropzoneBundle:Form:dropzone_preview.html.twig' %}
-        {% include 'GlavwebUploaderDropzoneBundle:Form:splash-screen-content-template.html.twig' %}
+        {% include '@GlavwebUploaderDropzone/Form/dropzone_preview.html.twig' %}
+        {% include '@GlavwebUploaderDropzone/Form/splash-screen-content-template.html.twig' %}
         <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control" />
     </div>
 
