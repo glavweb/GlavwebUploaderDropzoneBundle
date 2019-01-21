@@ -11,7 +11,7 @@ dropzone_preview_edit: Редактировать
 dropzone_preview_remove: Удалить
 
 uploader_dict_max_files_exceeded: Нельзя загрузить файлов больше чем
-uploader_server_error: Произошла ошибка сервера.
+uploader_server_error: Произошла ошибка на сервере.
 
 splash_screen_name: Название
 splash_screen_description: Описание

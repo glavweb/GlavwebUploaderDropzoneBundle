@@ -31,6 +31,9 @@
             var editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
                 requestId : "{{ requestId }}",
                 editUrl   : "{{ editUrl }}",
+                cropper: {
+                    ratio: {{ cropperRatio }}
+                },
                 messages : {
                     saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
                 }
@@ -41,6 +44,8 @@
                 uploadUrl               : "{{ uploadUrl }}",
                 deleteUrl               : "{{ deleteUrl }}",
                 file                    : file,
+                thumbnailWidth          : {{ thumbnailWidth }},
+                thumbnailHeight         : {{ thumbnailHeight }},
                 splashScreen            : splashScreen,
                 editMediaContentFactory : editMediaContentFactory,
                 messages: {
@@ -153,7 +158,7 @@
                 </div>
             </div>
         </div>
-        {% include 'GlavwebUploaderDropzoneBundle:Form:splash-screen-content-template.html.twig' %}
+        {% include '@GlavwebUploaderDropzone/Form/splash-screen-content-template.html.twig' %}
 
         <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
     </div>
@@ -225,7 +230,8 @@
 
         </div>
 
-        {% include 'GlavwebUploaderDropzoneBundle:Form:splash-screen-content-template.html.twig' %}
+        {% include '@GlavwebUploaderDropzone/Form/splash-screen-content-template.html.twig' %}
+
     </div>
 
     <script>
@@ -376,5 +382,4 @@
             });
         })(jQuery);
     </script>
-
 {% endblock %}

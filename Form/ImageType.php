@@ -11,6 +11,10 @@
 
 namespace Glavweb\UploaderDropzoneBundle\Form;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\Form\FormView;
+
 /**
  * Class ImageType
  *
@@ -25,5 +29,35 @@ class ImageType extends AbstractMediaItemType
     public function getBlockPrefix()
     {
         return 'cms_media_image';
+    }
+
+    /**
+     * @param FormView $view
+     * @param FormInterface $form
+     * @param array $options
+     */
+    public function buildView(FormView $view, FormInterface $form, array $options)
+    {
+        parent::buildView($view, $form, $options);
+
+        $view->vars['thumbnailWidth'] = $options['thumbnail_width'];
+        $view->vars['thumbnailHeight'] = $options['thumbnail_height'];
+        $view->vars['cropperRatio'] = $options['cropper_ratio'];
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function configureOptions(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+            'compound'         => false,
+            'requestId'        => null,
+            'context'          => null,
+            'thumbnail_filter' => null,
+            'thumbnail_width'  => 250,
+            'thumbnail_height' => 250,
+            'cropper_ratio'    => 1
+        ]);
     }
 }
