@@ -837,6 +837,215 @@
     {
         return new VideoCollectionFormType(this, options, callback);
     };
+
+    /**
+     * Constructor
+     *
+     * @param {jQuery} $wrapper
+     * @param {object} options
+     */
+    function BaseFileFormType($wrapper, options)
+    {
+        this.wrapper = $wrapper;
+        this.options = $.extend({
+            uploadUrl               : null,
+            deleteUrl               : null,
+            requestId               : null,
+            splashScreen            : null,
+            editMediaContentFactory : null,
+            messages: {
+                dictMaxFilesExceeded: "You can't download files more than",
+                serverError:          'An error occurred on the server.'
+            }
+        }, options);
+
+        // Define UI elements
+        this.ui = {
+            uploadFileWrapper     : $wrapper.find('.js-upload-file-wrapper'), // Area has upload button
+            uploadPreviewTemplate : $wrapper.find('.js-preview-template-wrapper').html(), // Preview template
+            uploadPreviewWrapper  : $wrapper.find('.js-preview-wrapper'), // Where display previews
+            fieldValue            : $wrapper.find('.js-field-value'), // hidden input
+
+            controlBar : {
+                uploadFile: $wrapper.find('.js-control-bar-upload-file'), // Upload zone
+                editFile:   $wrapper.find('.js-control-bar-edit-file')
+            }
+        };
+
+        // Define listeners
+        this.defineListeners();
+    }
+
+    // Extends from BaseMediaFormType
+    BaseFileFormType.prototype = Object.create(BaseMediaFormType.prototype);
+    BaseFileFormType.prototype.constructor = BaseFileFormType;
+
+    /**
+     * Define listeners
+     */
+    BaseFileFormType.prototype.defineListeners = function ()
+    {
+        var self = this;
+
+        // On click edit file
+        $(document).on('click', this.ui.controlBar.editFile.selector, function(){
+            var $preview = $(this).closest('.js-dropzone-file');
+
+            splashScreen = self.options.splashScreen;
+            if (splashScreen === null || splashScreen === undefined) {
+                throw new Error('Splash screen plugin is not defined.');
+            }
+
+            var data = self.getPreviewData($preview);
+            data['media'] = '<img class="js-file splash-screen-file" src="' + data['content_path'] + '">';
+
+            var editMediaContent     = self.options.editMediaContentFactory.create(data);
+            var $splashScreenContent = editMediaContent.getContent();
+
+            splashScreen.content($splashScreenContent);
+
+            // On save success
+            $splashScreenContent.bind('saveSuccess', function(e, response, data) {
+                self.setPreviewName($preview, data.name);
+                self.setDataForPreview($preview, data);
+            });
+        });
+    };
+
+    /**
+     * Set name
+     *
+     * @param {jQuery} $previewElement
+     * @param {string} name
+     */
+    BaseFileFormType.prototype.setPreviewName = function ($previewElement, name)
+    {
+        $previewElement.find('.js-file-name').text(name);
+    };
+
+    /**
+     * Constructor
+     *
+     * @param {jQuery} $wrapper
+     * @param {object} options
+     * @param {function} callback
+     */
+    function FileFormType($wrapper, options, callback)
+    {
+        BaseFileFormType.apply(this, arguments);
+
+        this.options = $.extend({
+            file: {}
+        }, this.options);
+
+        this.storedFile       = null;
+        this.isShowStoredFile = null;
+
+        this.dropzoneUploader = this.initDropzoneUploader(options.uploadUrl, options.deleteUrl, options.file);
+
+        if (callback !== undefined) {
+            callback(this);
+        }
+    }
+
+    // Extends from BaseFileFormType
+    FileFormType.prototype = Object.create(BaseFileFormType.prototype);
+    FileFormType.prototype.constructor = FileFormType;
+
+    /**
+     * Init dropzone uploader
+     *
+     * @param {string} uploadUrl
+     * @param {string} deleteUrl
+     * @param {object} fileItem
+     */
+    FileFormType.prototype.initDropzoneUploader = function (uploadUrl, deleteUrl, fileItem)
+    {
+        var self = this;
+        var dropzoneUploader = $(this.ui.controlBar.uploadFile).dropzoneUploader({
+            url:               uploadUrl,
+            deleteUrl:         deleteUrl,
+            previewsContainer: this.ui.uploadPreviewWrapper.selector,
+            previewTemplate:   this.ui.uploadPreviewTemplate,
+            requestId:         this.options.requestId,
+            maxFiles:          1,
+            messages: {
+                dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
+                serverError:          this.options.serverError
+            }
+        });
+
+        if (!$.isEmptyObject(fileItem)) {
+            var mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
+
+            self.storedFile       = mockFile;
+            self.isShowStoredFile = true;
+            self.ui.uploadFileWrapper.hide();
+
+            $previewElement = $(mockFile.previewElement);
+            $previewElement.show();
+
+            self.setPreviewName($previewElement, fileItem.name);
+            self.setDataForPreview($previewElement, fileItem);
+        }
+
+        var dropzone = dropzoneUploader.dropzone;
+
+        // On maxfilesexceeded
+        dropzone.on("maxfilesexceeded", function(file) {
+            this.removeAllFiles();
+            this.addFile(file);
+        });
+
+        // On success
+        dropzone.on("success", function(file, response) {
+            if (self.storedFile) {
+                $(self.storedFile.previewElement).hide();
+                self.isShowStoredFile = false;
+            }
+
+            // Set data for preview
+            $previewElement = $(file.previewElement);
+            $previewElement.show();
+
+            self.setPreviewName($previewElement, response.name);
+            self.setDataForPreview($previewElement, response);
+
+            self.ui.uploadFileWrapper.hide();
+        });
+
+        // On remove file
+        dropzone.on("removedfile", function(file, response) {
+            if (self.isShowStoredFile) {
+                self.storedFile       = null;
+                self.isShowStoredFile = false;
+
+            } else {
+                self.isShowStoredFile = true;
+            }
+
+            if (self.storedFile) {
+                $(self.storedFile.previewElement).show();
+
+            } else {
+                self.ui.uploadFileWrapper.show();
+            }
+        });
+
+        return dropzoneUploader;
+    };
+
+    /**
+     * Init plugin
+     *
+     * @param {object} options
+     * @param {function} callback
+     * @returns {FileFormType}
+     */
+    $.fn.fileFormType = function (options, callback)
+    {
+        return new FileFormType(this, options, callback);
+    };
 })(jQuery);
 
 (function ($) {
