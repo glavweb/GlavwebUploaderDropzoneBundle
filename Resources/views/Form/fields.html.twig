@@ -93,6 +93,9 @@
             var editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
                 requestId : "{{ requestId }}",
                 editUrl   : "{{ editUrl }}",
+                cropper: {
+                    ratio: {{ cropperRatio }}
+                },
                 messages : {
                     saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
                 }
