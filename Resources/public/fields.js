@@ -93,6 +93,7 @@
             editMediaContentFactory : null,
             messages: {
                 dictMaxFilesExceeded: "You can't download files more than",
+                dictInvalidFileType:  "You can't upload files of this type.",
                 serverError:          'An error occurred on the server.'
             }
         }, options);
@@ -203,8 +204,9 @@
             requestId:         this.options.requestId,
             maxFiles:          1,
             messages: {
-                dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
-                serverError:          this.options.serverError
+                dictMaxFilesExceeded: this.options.messages.dictMaxFilesExceeded,
+                dictInvalidFileType:  this.options.messages.dictInvalidFileType,
+                serverError:          this.options.messages.serverError
             }
         });
 
@@ -244,6 +246,13 @@
             $previewElement.find('[data-dz-thumbnail]').attr('src', response.thumbnail_path);
 
             self.setDataForPreview($previewElement, response);
+        });
+
+        // On error
+        dropzone.on("error", function(file, response) {
+            if (response.error === 'error.whitelist') {
+                alert(self.options.messages.dictInvalidFileType);
+            }
         });
 
         // On remove file
@@ -310,8 +319,9 @@
             previewTemplate:   this.ui.uploadPreviewTemplate,
             requestId:         this.options.requestId,
             messages: {
-                dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
-                serverError:          this.options.serverError
+                dictMaxFilesExceeded: this.options.messages.dictMaxFilesExceeded,
+                dictInvalidFileType:  this.options.messages.dictInvalidFileType,
+                serverError:          this.options.messages.serverError
             }
         });
 
@@ -332,6 +342,13 @@
             $previewElement = $(file.previewElement);
             self.setDataForPreview($previewElement, response);
             self.updateMediasInFieldValue();
+        });
+
+        // On error
+        dropzone.on("error", function(file, response) {
+            if (response.error === 'error.whitelist') {
+                alert(self.options.messages.dictInvalidFileType);
+            }
         });
 
         // On remove file
@@ -855,7 +872,8 @@
             editMediaContentFactory : null,
             messages: {
                 dictMaxFilesExceeded: "You can't download files more than",
-                serverError:          'An error occurred on the server.'
+                dictInvalidFileType:  "You can't upload files of this type.",
+                serverError:          "An error occurred on the server."
             }
         }, options);
 
@@ -970,8 +988,9 @@
             requestId:         this.options.requestId,
             maxFiles:          1,
             messages: {
-                dictMaxFilesExceeded: this.options.dictMaxFilesExceeded,
-                serverError:          this.options.serverError
+                dictMaxFilesExceeded: this.options.messages.dictMaxFilesExceeded,
+                dictInvalidFileType:  this.options.messages.dictInvalidFileType,
+                serverError:          this.options.messages.serverError
             }
         });
 
@@ -1012,6 +1031,13 @@
             self.setDataForPreview($previewElement, response);
 
             self.ui.uploadFileWrapper.hide();
+        });
+
+        // On error
+        dropzone.on("error", function(file, response) {
+            if (response.error === 'error.whitelist') {
+                alert(self.options.messages.dictInvalidFileType);
+            }
         });
 
         // On remove file

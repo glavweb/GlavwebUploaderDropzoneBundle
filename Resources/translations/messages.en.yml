@@ -11,6 +11,7 @@ dropzone_preview_edit: Edit
 dropzone_preview_remove: Remove
 
 uploader_dict_max_files_exceeded: "You can't download files more than"
+uploader_dict_invalid_file_type: "You can't upload files of this type"
 uploader_server_error: An error occurred on the server.
 
 splash_screen_name: Name
