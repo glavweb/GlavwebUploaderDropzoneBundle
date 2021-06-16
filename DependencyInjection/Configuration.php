@@ -30,7 +30,26 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $treeBuilder->root('glavweb_uploader_dropzone');
+        $rootNode = $treeBuilder->root('glavweb_uploader_dropzone');
+
+        $rootNode
+            ->children()
+                ->scalarNode('max_filesize')
+                    ->info('Max file size in Megabites')->defaultValue(256)->end()
+                ->scalarNode('chunking')
+                    ->defaultFalse()->end()
+                ->scalarNode('force_chunking')
+                    ->defaultFalse()->end()
+                ->scalarNode('chunk_size')
+                    ->info('Chunk size in bits')->defaultValue(1000000)->end()
+                ->scalarNode('parallel_chunk_uploads')
+                    ->defaultFalse()->end()
+                ->scalarNode('retry_chunks')
+                    ->defaultFalse()->end()
+                ->scalarNode('retry_chunks_limit')
+                    ->defaultValue(3)->end()
+            ->end();
+
 
         return $treeBuilder;
     }

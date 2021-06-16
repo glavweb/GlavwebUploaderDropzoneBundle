@@ -8,11 +8,14 @@ download_file_button: Загрузить файл
 download_file_loading: Загрузка...
 
 dropzone_preview_edit: Редактировать
-dropzone_preview_remove: Удалить
 
-uploader_dict_max_files_exceeded: Нельзя загрузить файлов больше чем
+uploader_dict_max_files_exceeded: Нельзя загрузить файлов больше чем {{maxFiles}}
 uploader_dict_invalid_file_type: Неверный формат файла
-uploader_server_error: Произошла ошибка на сервере.
+uploader_dict_file_too_big:  Файл слишком большой ({{filesize}} MB). Максимальный допустимый размер файла {{maxFilesize}} MB
+uploader_dict_remove_file: Удалить
+uploader_dict_cancel_upload: Отменить загрузку
+uploader_dict_cancel_upload_confirmation: Уверены, что хотите прервать загрузку?
+uploader_dict_response_error: Произошла ошибка на сервере
 
 splash_screen_name: Название
 splash_screen_description: Описание

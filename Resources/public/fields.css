@@ -56,6 +56,43 @@
     box-sizing: border-box;
 }
 
+.dz-processing:not(.dz-complete) .gwu-progressbar {
+    display: block;
+}
+
+.gwu-progressbar {
+    display: none;
+    position: relative;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.gwu-progressbar-indicator {
+    position: absolute;
+    height: 100%;
+    background-color: #ddd;
+    transition: width ease-in-out 1s;
+}
+
+.gwu-progressbar-text {
+    position: relative;
+    padding: 5px;
+
+    color: #555;
+    text-align: center;
+}
+
+.gwu-gallery-box__overlay .gwu-progressbar {
+    margin: 5px;
+    background-color: rgba(221, 221, 221, 0.5);
+    width: auto;
+}
+
+.gwu-gallery-box__overlay .gwu-progressbar-text {
+    color: #000;
+    font-size: 16px;
+}
+
 .gwu-control:focus {
     outline: none;
 }

@@ -8,11 +8,14 @@ download_file_button: Download file
 download_file_loading: Uploading...
 
 dropzone_preview_edit: Edit
-dropzone_preview_remove: Remove
 
-uploader_dict_max_files_exceeded: "You can't download files more than"
-uploader_dict_invalid_file_type: "You can't upload files of this type"
-uploader_server_error: An error occurred on the server.
+uploader_dict_max_files_exceeded: You can't download files more than {{maxFiles}}
+uploader_dict_invalid_file_type: You can't upload files of this type
+uploader_dict_file_too_big:  'File is too big ({{filesize}} MB). Max filesize: {{maxFilesize}} MB'
+uploader_dict_remove_file: Remove
+uploader_dict_cancel_upload: Cancel upload
+uploader_dict_cancel_upload_confirmation: Are you sure you want to cancel this upload?
+uploader_dict_response_error: An error occurred on the server
 
 splash_screen_name: Name
 splash_screen_description: Description
