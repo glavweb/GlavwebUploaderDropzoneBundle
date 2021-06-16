@@ -211,6 +211,7 @@
 
             $previewElement = $(mockFile.previewElement);
             self.setDataForPreview($previewElement, fileItem);
+            self.definePreviewListeners(mockFile.previewElement);
         }
 
         var dropzone = dropzoneUploader.dropzone;
@@ -321,6 +322,7 @@
 
             var $previewElement = $(mockFile.previewElement);
             self.setDataForPreview($previewElement, fileItem);
+            self.definePreviewListeners(mockFile.previewElement);
         });
 
         var dropzone = dropzoneUploader.dropzone;
@@ -996,6 +998,7 @@
 
             self.setPreviewName($previewElement, fileItem.name);
             self.setDataForPreview($previewElement, fileItem);
+            self.definePreviewListeners(mockFile.previewElement)
         }
 
         var dropzone = dropzoneUploader.dropzone;

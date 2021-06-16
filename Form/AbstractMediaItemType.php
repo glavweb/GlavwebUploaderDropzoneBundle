@@ -64,7 +64,7 @@ class AbstractMediaItemType extends AbstractMediaType
 
         $media = $view->vars['value'];
         if ($media instanceof MediaInterface) {
-            $structuredMedia = $this->mediaStructure->getMediaStructure($media, $options['thumbnail_filter'], true, false);
+            $structuredMedia = $this->mediaStructure->getMediaStructure($media, $options['thumbnail_filter'], true);
             $mediaSecuredId  = $structuredMedia['id'];
         }
 
