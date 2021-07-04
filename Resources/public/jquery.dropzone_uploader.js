@@ -22,36 +22,50 @@
             maxFiles:          null,
             thumbnailWidth    : 480,
             thumbnailHeight   : 360,
-            messages : {
-                dictMaxFilesExceeded: "You can't download files more than",
-                serverError: 'An error occurred on the server.'
-            }
         }, options);
 
-        var dropzone = new Dropzone(selector, {
+        var acceptedFilesString = $.isArray(options.acceptedFiles) ? options.acceptedFiles.join(',') : options.acceptedFiles;
+
+        var dropzone = new Dropzone(selector, $.extend({
             url                  : options.url,
             previewsContainer    : options.previewsContainer,
             previewTemplate      : options.previewTemplate,
             maxFiles             : options.maxFiles,
+            maxFilesize          : options.maxFilesize,
+            acceptedFiles        : acceptedFilesString,
             thumbnailWidth       : options.thumbnailWidth,
             thumbnailHeight      : options.thumbnailHeight,
-            dictMaxFilesExceeded : options.messages.dictMaxFilesExceeded + ' ' + options.maxFiles,
-            error: function (file, message) {
-                var errorText = options.messages.serverError;
-
+            error: function (file, message, request) {
                 if (file.previewElement) {
-                    var $previewElement = $(file.previewElement);
+                    var $previewElement = $(file.previewElement)
+                    var errorText = message;
 
-                    if (typeof message !== "String" && message.error) {
-                        errorText = message.error;
+                    if (request) {
+                        if (typeof message === "object" && 'error' in message) {
+                            errorText = message.error;
+                        } else {
+                            errorText = this.options.dictResponseError.replace("{{statusCode}}", request.status);
+                        }
                     }
 
-                    $previewElement.find('.error').text(errorText);
+                    if (errorText === 'error.whitelist' || errorText === 'error.blacklist') {
+                        errorText = this.options.dictInvalidFileType;
+                    }
+
+                    $previewElement.addClass("dz-error");
+                    $previewElement.find("[data-dz-errormessage]").text(errorText);
                 }
             }
-        });
+        }, options.chunking, options.messages));
 
         this.progressFiles = 0;
+
+        dropzone.on("addedfile", function (file, mock) {
+            var $previewElement = $(file.previewElement)
+            var removeLabelText = mock ? this.options.dictRemoveFile : this.options.dictCancelUpload;
+
+            $previewElement.find('[data-gwu-remove-label]').text(removeLabelText);
+        });
 
         dropzone.on("removedfile", function (file) {
             if (file.response !== undefined && file.response.id !== undefined) {
@@ -76,6 +90,10 @@
         });
 
         dropzone.on("complete", function(file, response) {
+            var $previewElement = $(file.previewElement);
+
+            $previewElement.find('[data-gwu-remove-label]').text(this.options.dictRemoveFile);
+
             self.progressFiles -= 1;
         });
 
@@ -92,7 +110,7 @@
             }
         };
 
-        this.dropzone.emit('addedfile', mockFile);
+        this.dropzone.emit('addedfile', mockFile, true);
 
         if (thumbnailPath !== undefined) {
             this.dropzone.emit("thumbnail", mockFile, thumbnailPath);

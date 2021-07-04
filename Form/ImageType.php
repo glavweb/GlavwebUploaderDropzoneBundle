@@ -50,14 +50,16 @@ class ImageType extends AbstractMediaItemType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
-            'compound'         => false,
-            'requestId'        => null,
-            'context'          => null,
-            'thumbnail_filter' => null,
             'thumbnail_width'  => 250,
             'thumbnail_height' => 250,
             'cropper_ratio'    => 1
         ]);
+
+        $resolver->setAllowedTypes('thumbnail_width', 'int');
+        $resolver->setAllowedTypes('thumbnail_height', 'int');
+        $resolver->setAllowedTypes('cropper_ratio', ['float', 'int']);
     }
 }

@@ -1,5 +1,16 @@
 {% block cms_media_image_widget %}
     {% set file = value is not empty ? value : {} %}
+    {% set dropzoneDictionary = {
+            dictMaxFilesExceeded : 'uploader_dict_max_files_exceeded' | trans,
+            dictInvalidFileType : 'uploader_dict_invalid_file_type' | trans,
+            dictFileTooBig : 'uploader_dict_file_too_big' | trans,
+            dictRemoveFile : 'uploader_dict_remove_file' | trans,
+            dictCancelUpload : 'uploader_dict_cancel_upload' | trans,
+            dictCancelUploadConfirmation : 'uploader_dict_cancel_upload_confirmation' | trans,
+            dictResponseError : 'uploader_dict_response_error' | trans
+        }
+    %}
+
     <div id="js-image-form-type-{{ id }}" class="js-image-form-type">
         <div class="js-upload-preview-wrapper gwu-upload-preview-wrapper">
             <div class="js-upload-image-wrapper gwu-gallery-box-wr">
@@ -48,11 +59,10 @@
                 thumbnailHeight         : {{ thumbnailHeight }},
                 splashScreen            : splashScreen,
                 editMediaContentFactory : editMediaContentFactory,
-                messages: {
-                    dictMaxFilesExceeded: "{{ 'uploader_dict_max_files_exceeded'|trans }}",
-                    dictInvalidFileType:  "{{ 'uploader_dict_invalid_file_type'|trans }}",
-                    serverError:          "{{ 'uploader_server_error'|trans }}"
-                }
+                messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                maxFilesize: {{ maxFilesize }},
+                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             });
         })(jQuery);
     </script>
@@ -60,6 +70,16 @@
 
 {% block cms_media_image_collection_widget %}
     {% set files = value is not empty ? value : {} %}
+    {% set dropzoneDictionary = {
+            dictMaxFilesExceeded : 'uploader_dict_max_files_exceeded' | trans,
+            dictInvalidFileType : 'uploader_dict_invalid_file_type' | trans,
+            dictFileTooBig : 'uploader_dict_file_too_big' | trans,
+            dictRemoveFile : 'uploader_dict_remove_file' | trans,
+            dictCancelUpload : 'uploader_dict_cancel_upload' | trans,
+            dictCancelUploadConfirmation : 'uploader_dict_cancel_upload_confirmation' | trans,
+            dictResponseError : 'uploader_dict_response_error' | trans
+        }
+    %}
 
     <div id="js-image-collection-form-type-{{ id }}" class="js-image-collection-form-type">
         <div class="js-upload-preview-wrapper gwu-upload-preview-wrapper" id="js-upload-preview-wrapper-{{ requestId }}">
@@ -108,11 +128,10 @@
                 files                   : files,
                 splashScreen            : splashScreen,
                 editMediaContentFactory : editMediaContentFactory,
-                messages: {
-                    dictMaxFilesExceeded: "{{ 'uploader_dict_max_files_exceeded'|trans }}",
-                    dictInvalidFileType:  "{{ 'uploader_dict_invalid_file_type'|trans }}",
-                    serverError:          "{{ 'uploader_server_error'|trans }}"
-                }
+                messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                maxFilesize: {{ maxFilesize }},
+                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             }, function (self) {
                 var previewWrapper = document.getElementById('js-upload-preview-wrapper-{{ requestId }}');
 
@@ -191,7 +210,10 @@
                 media                   : media,
                 messages : {
                     uploadVideoLoadingText: "{{ 'download_video_button_loading'|trans }}"
-                }
+                },
+                maxFilesize: {{ maxFilesize }},
+                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             });
         })(jQuery);
     </script>
@@ -262,7 +284,10 @@
                 medias                  : medias,
                 messages : {
                     uploadVideoLoadingText: "{{ 'download_video_button_loading'|trans }}"
-                }
+                },
+                maxFilesize: {{ maxFilesize }},
+                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             }, function (self) {
                 var previewWrapper = document.getElementById('js-preview-wrapper-{{ requestId }}');
 
@@ -280,6 +305,16 @@
 
 {% block media_file_widget %}
     {% set file = value is not empty ? value : {} %}
+    {% set dropzoneDictionary = {
+            dictMaxFilesExceeded : 'uploader_dict_max_files_exceeded' | trans,
+            dictInvalidFileType : 'uploader_dict_invalid_file_type' | trans,
+            dictFileTooBig : 'uploader_dict_file_too_big' | trans,
+            dictRemoveFile : 'uploader_dict_remove_file' | trans,
+            dictCancelUpload : 'uploader_dict_cancel_upload' | trans,
+            dictCancelUploadConfirmation : 'uploader_dict_cancel_upload_confirmation' | trans,
+            dictResponseError : 'uploader_dict_response_error' | trans
+        }
+    %}
 
     <div id="js-file-form-type-{{ id }}" class="js-file-form-type gwu-form-control">
         <div class="js-upload-file-wrapper gwu-form-inner">
@@ -290,11 +325,16 @@
 
         {# Dropzone template #}
         <div style="display: none" class="js-preview-template-wrapper">
-            <div class="js-dropzone-file" style="display: none">
+            <div class="js-dropzone-file">
                 <!-- This is used as the file preview template -->
 
                 <div class="gwu-form-file">
-                    <span class="js-file-name gwu-form-file-name">{{ 'download_file_loading'|trans }}</span>
+                    <span class="js-file-name gwu-form-file-name"></span>
+
+                    <div class="gwu-progressbar">
+                        <div class="gwu-progressbar-indicator" data-dz-uploadprogress></div>
+                        <div class="gwu-progressbar-text">{{ 'download_file_loading'|trans }}</div>
+                    </div>
 
                     <button type="button" class="gwu-btn js-control-bar-edit-file">
                         <span class="fa fa-pencil-square-o"></span>
@@ -303,7 +343,7 @@
 
                     <button data-dz-remove class="gwu-btn">
                         <span class="fa fa-times"></span>
-                        {{ 'dropzone_preview_remove'|trans }}
+                        <span data-gwu-remove-label></span>
                     </button>
 
                     <div>
@@ -380,11 +420,10 @@
                 file                    : file,
                 splashScreen            : splashScreen,
                 editMediaContentFactory : editMediaContentFactory,
-                messages: {
-                    dictMaxFilesExceeded: "{{ 'uploader_dict_max_files_exceeded'|trans }}",
-                    dictInvalidFileType:  "{{ 'uploader_dict_invalid_file_type'|trans }}",
-                    serverError:          "{{ 'uploader_server_error'|trans }}"
-                }
+                messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                maxFilesize: {{ maxFilesize }},
+                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             });
         })(jQuery);
     </script>

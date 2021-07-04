@@ -48,12 +48,12 @@ class ImageCollectionType extends AbstractMediaCollectionType
      */
     public function configureOptions(OptionsResolver $resolver)
     {
+        parent::configureOptions($resolver);
+
         $resolver->setDefaults([
-            'compound'         => false,
-            'requestId'        => null,
-            'context'          => null,
-            'thumbnail_filter' => null,
-            'cropper_ratio'    => 1
+            'cropper_ratio' => 1
         ]);
+
+        $resolver->setAllowedTypes('cropper_ratio', ['float', 'int']);
     }
 }

@@ -91,11 +91,7 @@
             requestId               : null,
             splashScreen            : null,
             editMediaContentFactory : null,
-            messages: {
-                dictMaxFilesExceeded: "You can't download files more than",
-                dictInvalidFileType:  "You can't upload files of this type.",
-                serverError:          'An error occurred on the server.'
-            }
+            editImageSelector       : '.js-control-bar-edit-image'
         }, options);
 
         // Define UI elements
@@ -107,12 +103,8 @@
 
             controlBar : {
                 uploadImage: $wrapper.find('.js-control-bar-upload-image'),
-                editImage:   $wrapper.find('.js-control-bar-edit-image')
             }
         };
-
-        // Define listeners
-        this.defineListeners();
     }
 
     // Extends from BaseMediaFormType
@@ -120,17 +112,18 @@
     BaseImageFormType.prototype.constructor = BaseImageFormType;
 
     /**
-     * Define listeners
+     * Define preview listeners
+     *
+     * @param {DOMElement} preview
      */
-    BaseImageFormType.prototype.defineListeners = function ()
+    BaseImageFormType.prototype.definePreviewListeners = function (preview)
     {
         var self = this;
+        var $preview = $(preview);
 
         // On click edit image
-        $(document).on('click', this.ui.controlBar.editImage.selector, function(){
-            var $preview = $(this).closest('.js-dropzone-file');
-
-            splashScreen = self.options.splashScreen;
+        $preview.find(this.options.editImageSelector).click(function(){
+            var splashScreen = self.options.splashScreen;
             if (splashScreen === null || splashScreen === undefined) {
                 throw new Error('Splash screen plugin is not defined.');
             }
@@ -203,11 +196,10 @@
             thumbnailHeight:   this.options.thumbnailHeight,
             requestId:         this.options.requestId,
             maxFiles:          1,
-            messages: {
-                dictMaxFilesExceeded: this.options.messages.dictMaxFilesExceeded,
-                dictInvalidFileType:  this.options.messages.dictInvalidFileType,
-                serverError:          this.options.messages.serverError
-            }
+            chunking:          this.options.chunking,
+            maxFilesize:       this.options.maxFilesize,
+            acceptedFiles:     this.options.acceptedFiles,
+            messages:          this.options.messages
         });
 
         if (!$.isEmptyObject(fileItem)) {
@@ -219,6 +211,7 @@
 
             $previewElement = $(mockFile.previewElement);
             self.setDataForPreview($previewElement, fileItem);
+            self.definePreviewListeners(mockFile.previewElement);
         }
 
         var dropzone = dropzoneUploader.dropzone;
@@ -229,30 +222,30 @@
             this.addFile(file);
         });
 
-        // On thumbnail
-        dropzone.on("thumbnail", function(file, response) {
+        // On file added
+        dropzone.on("addedfile", function(file) {
+            var $previewElement = $(file.previewElement);
+
+            self.definePreviewListeners(file.previewElement);
+
             if (self.storedFile) {
                 $(self.storedFile.previewElement).hide();
                 self.isShowStoredFile = false;
             }
 
             self.ui.uploadImageWrapper.hide();
+            $previewElement.find(self.options.editImageSelector).hide();
         });
 
         // On success
         dropzone.on("success", function(file, response) {
+            var $previewElement = $(file.previewElement);
+
             // Set data for preview
-            $previewElement = $(file.previewElement);
-            $previewElement.find('[data-dz-thumbnail]').attr('src', response.thumbnail_path);
-
             self.setDataForPreview($previewElement, response);
-        });
 
-        // On error
-        dropzone.on("error", function(file, response) {
-            if (response.error === 'error.whitelist') {
-                alert(self.options.messages.dictInvalidFileType);
-            }
+            $previewElement.find('[data-dz-thumbnail]').attr('src', response.thumbnail_path);
+            $previewElement.find(self.options.editImageSelector).show();
         });
 
         // On remove file
@@ -318,37 +311,39 @@
             previewsContainer: this.ui.uploadPreviewWrapper.selector,
             previewTemplate:   this.ui.uploadPreviewTemplate,
             requestId:         this.options.requestId,
-            messages: {
-                dictMaxFilesExceeded: this.options.messages.dictMaxFilesExceeded,
-                dictInvalidFileType:  this.options.messages.dictInvalidFileType,
-                serverError:          this.options.messages.serverError
-            }
+            chunking:          this.options.chunking,
+            maxFilesize:       this.options.maxFilesize,
+            acceptedFiles:     this.options.acceptedFiles,
+            messages:          this.options.messages
         });
-
-        var $previewElement;
 
         $.each(files, function (key, fileItem) {
             var mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
 
-            $previewElement = $(mockFile.previewElement);
+            var $previewElement = $(mockFile.previewElement);
             self.setDataForPreview($previewElement, fileItem);
+            self.definePreviewListeners(mockFile.previewElement);
         });
 
         var dropzone = dropzoneUploader.dropzone;
 
+        // On file added
+        dropzone.on("addedfile", function(file) {
+            var $previewElement = $(file.previewElement);
+
+            self.definePreviewListeners(file.previewElement);
+
+            $previewElement.find(self.options.editImageSelector).hide();
+        });
+
         // On success
         dropzone.on("success", function(file, response) {
             // Set data for preview
-            $previewElement = $(file.previewElement);
+            var $previewElement = $(file.previewElement);
             self.setDataForPreview($previewElement, response);
             self.updateMediasInFieldValue();
-        });
 
-        // On error
-        dropzone.on("error", function(file, response) {
-            if (response.error === 'error.whitelist') {
-                alert(self.options.messages.dictInvalidFileType);
-            }
+            $previewElement.find(self.options.editImageSelector).show();
         });
 
         // On remove file
@@ -874,7 +869,8 @@
                 dictMaxFilesExceeded: "You can't download files more than",
                 dictInvalidFileType:  "You can't upload files of this type.",
                 serverError:          "An error occurred on the server."
-            }
+            },
+            editFileSelector:   '.js-control-bar-edit-file'
         }, options);
 
         // Define UI elements
@@ -885,13 +881,9 @@
             fieldValue            : $wrapper.find('.js-field-value'), // hidden input
 
             controlBar : {
-                uploadFile: $wrapper.find('.js-control-bar-upload-file'), // Upload zone
-                editFile:   $wrapper.find('.js-control-bar-edit-file')
+                uploadFile: $wrapper.find('.js-control-bar-upload-file') // Upload zone
             }
         };
-
-        // Define listeners
-        this.defineListeners();
     }
 
     // Extends from BaseMediaFormType
@@ -899,17 +891,18 @@
     BaseFileFormType.prototype.constructor = BaseFileFormType;
 
     /**
-     * Define listeners
+     * Define preview listeners
+     *
+     * @param {DOMElement} preview
      */
-    BaseFileFormType.prototype.defineListeners = function ()
+    BaseFileFormType.prototype.definePreviewListeners = function (preview)
     {
         var self = this;
+        var $preview = $(preview);
 
         // On click edit file
-        $(document).on('click', this.ui.controlBar.editFile.selector, function(){
-            var $preview = $(this).closest('.js-dropzone-file');
-
-            splashScreen = self.options.splashScreen;
+        $preview.find(this.options.editFileSelector).click(function(){
+            var splashScreen = self.options.splashScreen;
             if (splashScreen === null || splashScreen === undefined) {
                 throw new Error('Splash screen plugin is not defined.');
             }
@@ -981,17 +974,16 @@
     {
         var self = this;
         var dropzoneUploader = $(this.ui.controlBar.uploadFile).dropzoneUploader({
-            url:               uploadUrl,
-            deleteUrl:         deleteUrl,
-            previewsContainer: this.ui.uploadPreviewWrapper.selector,
-            previewTemplate:   this.ui.uploadPreviewTemplate,
-            requestId:         this.options.requestId,
-            maxFiles:          1,
-            messages: {
-                dictMaxFilesExceeded: this.options.messages.dictMaxFilesExceeded,
-                dictInvalidFileType:  this.options.messages.dictInvalidFileType,
-                serverError:          this.options.messages.serverError
-            }
+            url:                uploadUrl,
+            deleteUrl:          deleteUrl,
+            previewsContainer:  this.ui.uploadPreviewWrapper.selector,
+            previewTemplate:    this.ui.uploadPreviewTemplate,
+            requestId:          this.options.requestId,
+            maxFiles:           1,
+            chunking:           this.options.chunking,
+            maxFilesize:        this.options.maxFilesize,
+            acceptedFiles:      this.options.acceptedFiles,
+            messages:           this.options.messages
         });
 
         if (!$.isEmptyObject(fileItem)) {
@@ -1006,6 +998,7 @@
 
             self.setPreviewName($previewElement, fileItem.name);
             self.setDataForPreview($previewElement, fileItem);
+            self.definePreviewListeners(mockFile.previewElement)
         }
 
         var dropzone = dropzoneUploader.dropzone;
@@ -1016,28 +1009,32 @@
             this.addFile(file);
         });
 
-        // On success
-        dropzone.on("success", function(file, response) {
+        // On file added
+        dropzone.on("addedfile", function(file) {
+            var $previewElement = $(file.previewElement);
+
+            self.definePreviewListeners(file.previewElement)
+
             if (self.storedFile) {
                 $(self.storedFile.previewElement).hide();
                 self.isShowStoredFile = false;
             }
 
-            // Set data for preview
-            $previewElement = $(file.previewElement);
-            $previewElement.show();
-
-            self.setPreviewName($previewElement, response.name);
-            self.setDataForPreview($previewElement, response);
+            // Set name for preview
+            self.setPreviewName($previewElement, file.name);
 
             self.ui.uploadFileWrapper.hide();
+            $previewElement.find(self.options.editFileSelector).hide();
         });
 
-        // On error
-        dropzone.on("error", function(file, response) {
-            if (response.error === 'error.whitelist') {
-                alert(self.options.messages.dictInvalidFileType);
-            }
+        // On success
+        dropzone.on("success", function(file, response) {
+            var $previewElement = $(file.previewElement);
+
+            // Set data for preview
+            self.setDataForPreview($previewElement, response);
+
+            $previewElement.find(self.options.editFileSelector).show();
         });
 
         // On remove file
