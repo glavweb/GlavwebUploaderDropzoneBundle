@@ -48,10 +48,6 @@
                         }
                     }
 
-                    if (errorText === 'error.whitelist' || errorText === 'error.blacklist') {
-                        errorText = this.options.dictInvalidFileType;
-                    }
-
                     $previewElement.addClass("dz-error");
                     $previewElement.find("[data-dz-errormessage]").text(errorText);
                 }
