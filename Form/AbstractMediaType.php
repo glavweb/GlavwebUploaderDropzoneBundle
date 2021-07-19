@@ -18,8 +18,6 @@ use Glavweb\UploaderBundle\Model\MediaInterface;
 use Glavweb\UploaderBundle\Util\MediaStructure;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\CallbackTransformer;
-use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -145,7 +143,7 @@ abstract class AbstractMediaType extends AbstractType
      */
     private function generateRequestId(FormView $view)
     {
-        return $view->vars['id'] . '_' . uniqid();
+        return $view->vars['id'] . '_' . uniqid('', false);
     }
 
     /**
