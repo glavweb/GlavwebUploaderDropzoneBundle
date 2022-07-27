@@ -7,23 +7,25 @@
 
             <div class="gwu-form-content">
                 <div>
-                    <div class="gwu-form-group">
+                    <div class="gwu-form-group" data-form-name-group>
                         <label class="gwu-control-label" for="">
                             {{ 'splash_screen_name'|trans }}
                         </label>
 
                         <div>
-                            <input data-form-name class="gwu-control" type="text" name="name" value="">
+                            <input data-form-name-input class="gwu-control" type="text" name="name" value="">
+                            <div data-form-name-text class="gwu-text"></div>
                         </div>
                     </div>
 
-                    <div class="gwu-form-group">
+                    <div class="gwu-form-group" data-form-description-group>
                         <label class="gwu-control-label" for="">
                             {{ 'splash_screen_description'|trans }}
                         </label>
 
                         <div>
                             <textarea data-form-description class="gwu-textarea" name="description" rows="4"></textarea>
+                            <div data-form-description-text class="gwu-text"></div>
                         </div>
                     </div>
                     <table class="gwu-table">

@@ -4,6 +4,13 @@
  * @see {@link http://api.jquery.com/jQuery/}
  */
 
+var visible = 1 << 1
+var FieldState = {
+    Hidden: 0,
+    Visible: visible,
+    Editable: visible | 1 << 2
+};
+
 /**
  * MediaFormType
  *
@@ -131,7 +138,7 @@
             var data = self.getPreviewData($preview);
             data['media'] = '<img class="js-image splash-screen-image" src="' + data['content_path'] + '">';
 
-            var editMediaContent     = self.options.editMediaContentFactory.create(data);
+            var editMediaContent     = self.options.editMediaContentFactory.create(data, self.options);
             var $splashScreenContent = editMediaContent.getContent();
 
             splashScreen.content($splashScreenContent);
@@ -473,7 +480,7 @@
             var src = '//www.youtube.com/embed/' + data.provider_reference;
             data['media'] = '<iframe class="js-iframe" width="' + data.width + '" height="' + data.height + '" src="' + src + '" frameborder="0" allowfullscreen></iframe>';
 
-            var editMediaContent     = self.options.editMediaContentFactory.create(data);
+            var editMediaContent     = self.options.editMediaContentFactory.create(data, self.options);
             var $splashScreenContent = editMediaContent.getContent();
 
             splashScreen.content($splashScreenContent);
@@ -914,7 +921,7 @@
             var data = self.getPreviewData($preview);
             data['media'] = '<img class="js-file splash-screen-file" src="' + data['content_path'] + '">';
 
-            var editMediaContent     = self.options.editMediaContentFactory.create(data);
+            var editMediaContent     = self.options.editMediaContentFactory.create(data, self.options);
             var $splashScreenContent = editMediaContent.getContent();
 
             splashScreen.content($splashScreenContent);
@@ -1077,7 +1084,7 @@
     };
 })(jQuery);
 
-(function ($) {
+(function ($, FieldState) {
     /**
      * @param {HTMLElement} $wrapper
      * @param {object}     options
@@ -1092,18 +1099,20 @@
      * Create content
      *
      * @param {object} data
+     * @param {object} fieldOptions
      */
-    EditMediaContentFactory.prototype.create = function (data) {
-        return new EditMediaContent(this.template, this.options, data);
+    EditMediaContentFactory.prototype.create = function (data, fieldOptions) {
+        return new EditMediaContent(this.template, this.options, data, fieldOptions);
     };
 
     /**
      * @param {string} template
      * @param {object} options
      * @param {object} data
+     * @param {object} fieldOptions
      * @constructor
      */
-    function EditMediaContent(template, options, data) {
+    function EditMediaContent(template, options, data, fieldOptions) {
         this.options = $.extend({
             editUrl   : null,
             requestId : null,
@@ -1115,6 +1124,8 @@
             }
         }, options);
 
+        this.fieldOptions = fieldOptions;
+
         $template = $(template);
         this.template = $template;
 
@@ -1124,8 +1135,12 @@
         this.ui = {
             media : $template.find('[data-media]'),
             form: {
-                name        : $template.find('[data-form-name]'),
-                description : $template.find('[data-form-description]')
+                name             : $template.find('[data-form-name-input]'),
+                nameGroup        : $template.find('[data-form-name-group]'),
+                nameText         : $template.find('[data-form-name-text]'),
+                description      : $template.find('[data-form-description-input]'),
+                descriptionGroup : $template.find('[data-form-description-group]'),
+                descriptionText  : $template.find('[data-form-description-text]')
             },
             table: {
                 contentType : $template.find('[data-table-content-type]'),
@@ -1140,9 +1155,37 @@
 
         this.saveButtonText = this.ui.controlBar.saveButton.text();
 
+        this.configure();
         this.defineListeners();
         this.populate(data);
-        this.initCropper(this.options.cropper);
+
+        if (data.content_type !== 'image/svg+xml') {
+            this.initCropper(this.options.cropper);
+        }
+    }
+
+    EditMediaContent.prototype.configure = function () {
+        switch (this.fieldOptions.nameFieldState) {
+            case FieldState.Hidden:
+                this.ui.form.nameGroup.hide();
+                break;
+            case FieldState.Visible:
+                this.ui.form.name.hide();
+                break;
+            default:
+                this.ui.form.nameText.hide();
+        }
+
+        switch (this.fieldOptions.descriptionFieldState) {
+            case FieldState.Hidden:
+                this.ui.form.descriptionGroup.hide();
+                break;
+            case FieldState.Visible:
+                this.ui.form.description.hide();
+                break;
+            default:
+                this.ui.form.descriptionText.hide();
+        }
     }
 
     /**
@@ -1270,11 +1313,13 @@
 
         this.ui.media.html(data['media']);
         this.ui.form.name.val(data['name']);
+        this.ui.form.nameText.text(data['name']);
         this.ui.form.description.val(data['description']);
+        this.ui.form.descriptionText.text(data['description']);
         this.ui.table.contentType.text(data['content_type']);
         this.ui.table.contentSize.text(contentSize);
-        this.ui.table.width.text(data['width']);
-        this.ui.table.height.text(data['height']);
+        this.ui.table.width.text(data['width'] !== null ? data['width'] : '-');
+        this.ui.table.height.text(data['height'] !== null ? data['height'] : '-');
     };
 
     /**
@@ -1343,4 +1388,4 @@
     $.fn.editMediaContentFactory = function (options) {
         return new EditMediaContentFactory(this, options);
     };
-})(jQuery);
+})(jQuery, FieldState);

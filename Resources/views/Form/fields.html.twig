@@ -63,7 +63,9 @@
                 width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                nameFieldState: {{ nameFieldState }},
+                descriptionFieldState: {{ descriptionFieldState }}
             });
         })(jQuery);
     </script>
@@ -135,7 +137,9 @@
                 width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                nameFieldState: {{ nameFieldState }},
+                descriptionFieldState: {{ descriptionFieldState }}
             }, function (self) {
                 var previewWrapper = document.getElementById('js-upload-preview-wrapper-{{ requestId }}');
 
@@ -219,7 +223,9 @@
                 width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                nameFieldState: {{ nameFieldState }},
+                descriptionFieldState: {{ descriptionFieldState }}
             });
         })(jQuery);
     </script>
@@ -295,7 +301,9 @@
                 width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                nameFieldState: {{ nameFieldState }},
+                descriptionFieldState: {{ descriptionFieldState }}
             }, function (self) {
                 var previewWrapper = document.getElementById('js-preview-wrapper-{{ requestId }}');
 
@@ -434,7 +442,9 @@
                 width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
+                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                nameFieldState: {{ nameFieldState }},
+                descriptionFieldState: {{ descriptionFieldState }}
             });
         })(jQuery);
     </script>

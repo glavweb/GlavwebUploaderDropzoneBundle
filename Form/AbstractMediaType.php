@@ -16,6 +16,7 @@ use Glavweb\UploaderBundle\Entity\Media;
 use Glavweb\UploaderBundle\Manager\UploaderManager;
 use Glavweb\UploaderBundle\Model\MediaInterface;
 use Glavweb\UploaderBundle\Util\MediaStructure;
+use Glavweb\UploaderDropzoneBundle\Enum\FieldState;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
@@ -79,8 +80,10 @@ abstract class AbstractMediaType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
-        $context       = $options['context'];
-        $contextConfig = $this->uploaderManager->getContextConfig($context);
+        $context               = $options['context'];
+        $contextConfig         = $this->uploaderManager->getContextConfig($context);
+        $descriptionEnabled    = $contextConfig['description_enabled'] ?? true;
+        $descriptionFieldState = $descriptionEnabled ? $options['description_field_state'] : FieldState::HIDDEN;
 
         $requestId = $options['requestId'] ?: $this->generateRequestId($view);
 
@@ -89,6 +92,9 @@ abstract class AbstractMediaType extends AbstractType
         $view->vars['width']         = $contextConfig['width'] ?? null;
         $view->vars['height']        = $contextConfig['height'] ?? null;
         $view->vars['acceptedFiles'] = $contextConfig['allowed_mimetypes'] ?? null;
+
+        $view->vars['nameFieldState']        = $options['name_field_state'];
+        $view->vars['descriptionFieldState'] = $descriptionFieldState;
 
         $view->vars['chunkingOptions'] = [
             'chunking'             => $options['chunking'],
@@ -114,16 +120,18 @@ abstract class AbstractMediaType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'compound'               => false,
-            'requestId'              => null,
-            'context'                => null,
-            'thumbnail_filter'       => null,
-            'chunking'               => $this->config['chunking'],
-            'force_chunking'         => $this->config['force_chunking'],
-            'chunk_size'             => $this->config['chunk_size'],
-            'parallel_chunk_uploads' => $this->config['parallel_chunk_uploads'],
-            'retry_chunks'           => $this->config['retry_chunks'],
-            'retry_chunks_limit'     => $this->config['retry_chunks_limit'],
+            'compound'                => false,
+            'requestId'               => null,
+            'context'                 => null,
+            'thumbnail_filter'        => null,
+            'chunking'                => $this->config['chunking'],
+            'force_chunking'          => $this->config['force_chunking'],
+            'chunk_size'              => $this->config['chunk_size'],
+            'parallel_chunk_uploads'  => $this->config['parallel_chunk_uploads'],
+            'retry_chunks'            => $this->config['retry_chunks'],
+            'retry_chunks_limit'      => $this->config['retry_chunks_limit'],
+            'name_field_state'        => FieldState::EDITABLE,
+            'description_field_state' => FieldState::EDITABLE,
         ]);
 
         $resolver->setRequired(['context']);
@@ -137,6 +145,11 @@ abstract class AbstractMediaType extends AbstractType
         $resolver->setAllowedTypes('parallel_chunk_uploads', 'bool');
         $resolver->setAllowedTypes('retry_chunks', 'bool');
         $resolver->setAllowedTypes('retry_chunks_limit', 'int');
+        $resolver->setAllowedTypes('name_field_state', 'int');
+        $resolver->setAllowedTypes('description_field_state', 'int');
+
+        $resolver->setAllowedValues('name_field_state', FieldState::getValues());
+        $resolver->setAllowedValues('description_field_state', FieldState::getValues());
     }
 
     /**
