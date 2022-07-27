@@ -34,8 +34,6 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->scalarNode('max_filesize')
-                    ->info('Max file size in Megabites')->defaultValue(256)->end()
                 ->scalarNode('chunking')
                     ->defaultFalse()->end()
                 ->scalarNode('force_chunking')

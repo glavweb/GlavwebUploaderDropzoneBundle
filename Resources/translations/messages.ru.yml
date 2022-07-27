@@ -16,6 +16,7 @@ uploader_dict_remove_file: Удалить
 uploader_dict_cancel_upload: Отменить загрузку
 uploader_dict_cancel_upload_confirmation: Уверены, что хотите прервать загрузку?
 uploader_dict_response_error: Произошла ошибка на сервере
+uploader_dict_invalid_image_dimension: Недопустимый размер изображения
 
 splash_screen_name: Название
 splash_screen_description: Описание

@@ -198,6 +198,8 @@
             maxFiles:          1,
             chunking:          this.options.chunking,
             maxFilesize:       this.options.maxFilesize,
+            width:             this.options.width,
+            height:            this.options.height,
             acceptedFiles:     this.options.acceptedFiles,
             messages:          this.options.messages
         });
@@ -313,6 +315,8 @@
             requestId:         this.options.requestId,
             chunking:          this.options.chunking,
             maxFilesize:       this.options.maxFilesize,
+            width:             this.options.width,
+            height:            this.options.height,
             acceptedFiles:     this.options.acceptedFiles,
             messages:          this.options.messages
         });
@@ -982,6 +986,8 @@
             maxFiles:           1,
             chunking:           this.options.chunking,
             maxFilesize:        this.options.maxFilesize,
+            width:             this.options.width,
+            height:            this.options.height,
             acceptedFiles:      this.options.acceptedFiles,
             messages:           this.options.messages
         });

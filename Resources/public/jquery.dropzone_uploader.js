@@ -10,6 +10,10 @@
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 (function( $ ){
+    function isInteger(value) {
+        return typeof value === 'number' && value % 1 === 0
+    }
+
     function DropzoneUploader(selector, options) {
         var self = this;
 
@@ -20,6 +24,9 @@
             deleteUrl:         null,
             requestId:         null,
             maxFiles:          null,
+            maxFilesize:       null,
+            width:             null,
+            height:            null,
             thumbnailWidth    : 480,
             thumbnailHeight   : 360,
         }, options);
@@ -51,6 +58,14 @@
                     $previewElement.addClass("dz-error");
                     $previewElement.find("[data-dz-errormessage]").text(errorText);
                 }
+            },
+            accept: function(file, done) {
+                var errorMessage = this.options.dictInvalidImageDimension;
+
+                file.acceptDimensions = done;
+                file.rejectDimensions = function() {
+                    done(errorMessage);
+                };
             }
         }, options.chunking, options.messages));
 
@@ -91,6 +106,29 @@
             $previewElement.find('[data-gwu-remove-label]').text(this.options.dictRemoveFile);
 
             self.progressFiles -= 1;
+        });
+
+        dropzone.on("thumbnail", function(file) {
+            if (file.accepted) {
+                return;
+            }
+
+            var minWidth = options.width && options.width.min;
+            var maxWidth = options.width && options.width.max;
+            var minHeight = options.height && options.height.min;
+            var maxHeight = options.height && options.height.max;
+
+            if (file.type === 'image/svg+xml' || (
+                (!isInteger(minWidth) || file.width >= minWidth)
+                && (!isInteger(maxWidth) || file.width <= maxWidth)
+                && (!isInteger(minHeight) || file.height >= minHeight)
+                && (!isInteger(maxHeight) || file.height <= maxHeight)
+            )) {
+
+                file.acceptDimensions();
+            } else {
+                file.rejectDimensions();
+            }
         });
 
         this.dropzone = dropzone;

@@ -7,7 +7,7 @@
             dictRemoveFile : 'uploader_dict_remove_file' | trans,
             dictCancelUpload : 'uploader_dict_cancel_upload' | trans,
             dictCancelUploadConfirmation : 'uploader_dict_cancel_upload_confirmation' | trans,
-            dictResponseError : 'uploader_dict_response_error' | trans
+            dictInvalidImageDimension : 'uploader_dict_invalid_image_dimension' | trans
         }
     %}
 
@@ -28,7 +28,6 @@
                 </div>
             </div>
         </div>
-
         {% include '@GlavwebUploaderDropzone/Form/dropzone_preview.html.twig' %}
         {% include '@GlavwebUploaderDropzone/Form/splash-screen-content-template.html.twig' %}
         <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control" />
@@ -61,6 +60,8 @@
                 editMediaContentFactory : editMediaContentFactory,
                 messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 maxFilesize: {{ maxFilesize }},
+                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             });
@@ -77,7 +78,8 @@
             dictRemoveFile : 'uploader_dict_remove_file' | trans,
             dictCancelUpload : 'uploader_dict_cancel_upload' | trans,
             dictCancelUploadConfirmation : 'uploader_dict_cancel_upload_confirmation' | trans,
-            dictResponseError : 'uploader_dict_response_error' | trans
+            dictResponseError : 'uploader_dict_response_error' | trans,
+            dictInvalidImageDimension : 'uploader_dict_invalid_image_dimension' | trans
         }
     %}
 
@@ -130,6 +132,8 @@
                 editMediaContentFactory : editMediaContentFactory,
                 messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 maxFilesize: {{ maxFilesize }},
+                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             }, function (self) {
@@ -212,6 +216,8 @@
                     uploadVideoLoadingText: "{{ 'download_video_button_loading'|trans }}"
                 },
                 maxFilesize: {{ maxFilesize }},
+                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             });
@@ -286,6 +292,8 @@
                     uploadVideoLoadingText: "{{ 'download_video_button_loading'|trans }}"
                 },
                 maxFilesize: {{ maxFilesize }},
+                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             }, function (self) {
@@ -312,7 +320,8 @@
             dictRemoveFile : 'uploader_dict_remove_file' | trans,
             dictCancelUpload : 'uploader_dict_cancel_upload' | trans,
             dictCancelUploadConfirmation : 'uploader_dict_cancel_upload_confirmation' | trans,
-            dictResponseError : 'uploader_dict_response_error' | trans
+            dictResponseError : 'uploader_dict_response_error' | trans,
+            dictInvalidImageDimension : 'uploader_dict_invalid_image_dimension' | trans
         }
     %}
 
@@ -422,6 +431,8 @@
                 editMediaContentFactory : editMediaContentFactory,
                 messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 maxFilesize: {{ maxFilesize }},
+                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
+                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
                 chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }}
             });

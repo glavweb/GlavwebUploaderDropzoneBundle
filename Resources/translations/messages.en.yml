@@ -16,6 +16,7 @@ uploader_dict_remove_file: Remove
 uploader_dict_cancel_upload: Cancel upload
 uploader_dict_cancel_upload_confirmation: Are you sure you want to cancel this upload?
 uploader_dict_response_error: An error occurred on the server
+uploader_dict_invalid_image_dimension: Invalid image dimension
 
 splash_screen_name: Name
 splash_screen_description: Description

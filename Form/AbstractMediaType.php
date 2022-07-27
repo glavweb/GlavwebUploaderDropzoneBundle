@@ -79,11 +79,16 @@ abstract class AbstractMediaType extends AbstractType
      */
     public function buildView(FormView $view, FormInterface $form, array $options)
     {
+        $context       = $options['context'];
+        $contextConfig = $this->uploaderManager->getContextConfig($context);
+
         $requestId = $options['requestId'] ?: $this->generateRequestId($view);
 
-        $view->vars['requestId']       = $requestId;
-        $view->vars['maxFilesize']     = $options['max_filesize'];
-        $view->vars['acceptedFiles']   = $options['accepted_files'];
+        $view->vars['requestId']     = $requestId;
+        $view->vars['maxFilesize']   = $contextConfig['max_size'] ?? null;
+        $view->vars['width']         = $contextConfig['width'] ?? null;
+        $view->vars['height']        = $contextConfig['height'] ?? null;
+        $view->vars['acceptedFiles'] = $contextConfig['allowed_mimetypes'] ?? null;
 
         $view->vars['chunkingOptions'] = [
             'chunking'             => $options['chunking'],
@@ -94,8 +99,8 @@ abstract class AbstractMediaType extends AbstractType
             'retryChunksLimit'     => $options['retry_chunks_limit']
         ];
 
-        $view->vars['uploadUrl']       = $this->router->generate('glavweb_uploader_upload', [
-            'context'          => $options['context'],
+        $view->vars['uploadUrl'] = $this->router->generate('glavweb_uploader_upload', [
+            'context'          => $context,
             'thumbnail_filter' => $options['thumbnail_filter']
         ]);
 
@@ -113,8 +118,6 @@ abstract class AbstractMediaType extends AbstractType
             'requestId'              => null,
             'context'                => null,
             'thumbnail_filter'       => null,
-            'max_filesize'           => $this->config['max_filesize'],
-            'accepted_files'         => null,
             'chunking'               => $this->config['chunking'],
             'force_chunking'         => $this->config['force_chunking'],
             'chunk_size'             => $this->config['chunk_size'],
@@ -123,12 +126,11 @@ abstract class AbstractMediaType extends AbstractType
             'retry_chunks_limit'     => $this->config['retry_chunks_limit'],
         ]);
 
-        $resolver->setAllowedTypes('compound', 'bool');
+        $resolver->setRequired(['context']);
+
+        $resolver->setAllowedTypes('context', 'string');
         $resolver->setAllowedTypes('requestId', ['string', 'null']);
-        $resolver->setAllowedTypes('context', ['string', 'null']);
         $resolver->setAllowedTypes('thumbnail_filter', ['string', 'null']);
-        $resolver->setAllowedTypes('max_filesize', 'int');
-        $resolver->setAllowedTypes('accepted_files', ['null', 'array']);
         $resolver->setAllowedTypes('chunking', 'bool');
         $resolver->setAllowedTypes('force_chunking', 'bool');
         $resolver->setAllowedTypes('chunk_size', 'int');
