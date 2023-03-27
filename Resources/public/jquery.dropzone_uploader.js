@@ -77,6 +77,15 @@
 
         dropzone.on("sending", function (file, response, formData) {
             formData.append('request_id', options.requestId);
+            formData.append('type', file.type);
+
+            if (file.width !== undefined) {
+                formData.append('image_width', file.width);
+            }
+
+            if (file.height !== undefined) {
+                formData.append('image_height', file.height);
+            }
 
             self.progressFiles += 1;
         });
