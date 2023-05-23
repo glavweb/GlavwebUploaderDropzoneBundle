@@ -14,8 +14,8 @@
     ],
     "require": {
         "php": ">=7.2.5",
-        "symfony/http-foundation": "^4.0|^5.0",
-        "symfony/form": "^4.0|^5.0",
+        "symfony/http-foundation": "^4.0|^5.0|^6.0",
+        "symfony/form": "^4.0|^5.0|^6.0",
         "glavweb/uploader-bundle": "^3.4"
     },
     "autoload": {
