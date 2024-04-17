@@ -60,6 +60,11 @@
                 }
             },
             accept: function(file, done) {
+                if (!this._thumbnailQueue.includes(file)) {
+                    done();
+                    return;
+                }
+
                 var errorMessage = this.options.dictInvalidImageDimension;
 
                 file.acceptDimensions = done;
