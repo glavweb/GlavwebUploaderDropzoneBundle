@@ -81,6 +81,12 @@ class AbstractMediaCollectionType extends AbstractMediaType
 
         } elseif (is_array($inValue)) {
             $medias = $inValue;
+
+        } elseif (is_string($inValue) && $inValue !== '') {
+            $mediaData = json_decode($inValue, true);
+            if (is_array($mediaData) && isset($mediaData['medias'])) {
+                $medias = $this->filterRemovedMedias($this->getMedias($mediaData['medias']));
+            }
         }
 
         $structuredMedias = $this->mediaStructure->getStructure($medias, $options['thumbnail_filter'], true);
