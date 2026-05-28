@@ -31,7 +31,7 @@ class AbstractMediaItemType extends AbstractMediaType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->addModelTransformer(new CallbackTransformer(
+        $builder->addViewTransformer(new CallbackTransformer(
             function ($media) {
                 return $media;
             },
