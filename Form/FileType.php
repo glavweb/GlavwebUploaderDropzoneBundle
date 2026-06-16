@@ -12,17 +12,14 @@
 namespace Glavweb\UploaderDropzoneBundle\Form;
 
 /**
- * Class FileType
+ * Class FileType.
  *
- * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 class FileType extends AbstractMediaItemType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    #[\Override]
+    public function getBlockPrefix(): string
     {
         return 'media_file';
     }

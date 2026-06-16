@@ -16,42 +16,33 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ImageCollectionType
+ * Class ImageCollectionType.
  *
- * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 class ImageCollectionType extends AbstractMediaCollectionType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    #[\Override]
+    public function getBlockPrefix(): string
     {
         return 'cms_media_image_collection';
     }
 
-    /**
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    #[\Override]
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         parent::buildView($view, $form, $options);
 
-        $view->vars['cropperRatio'] = $options['cropper_ratio'];
+        $view->vars['cropperRatio'] = $options['cropper_ratio'] ?? null;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    #[\Override]
+    public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 
-        $resolver->setDefaults([
-            'cropper_ratio' => 1
+        $resolver->setDefined([
+            'cropper_ratio',
         ]);
 
         $resolver->setAllowedTypes('cropper_ratio', ['float', 'int']);

@@ -3,9 +3,8 @@
  * @external jQuery
  * @see {@link http://api.jquery.com/jQuery/}
  */
-
-var visible = 1 << 1
-var FieldState = {
+const visible = 1 << 1;
+const FieldState = {
     Hidden: 0,
     Visible: visible,
     Editable: visible | 1 << 2
@@ -72,11 +71,11 @@ var FieldState = {
      */
     BaseMediaFormType.prototype.getMediaIdsFromPreviews = function ($previews)
     {
-        var self          = this;
-        var updatedMedias = [];
+        const self = this;
+        const updatedMedias = [];
 
         $previews.each(function (key, preview) {
-            var data = self.getPreviewData($(preview));
+            const data = self.getPreviewData($(preview));
             updatedMedias.push(data['id']);
         });
 
@@ -125,21 +124,21 @@ var FieldState = {
      */
     BaseImageFormType.prototype.definePreviewListeners = function (preview)
     {
-        var self = this;
-        var $preview = $(preview);
+        const self = this;
+        const $preview = $(preview);
 
         // On click edit image
         $preview.find(this.options.editImageSelector).click(function(){
-            var splashScreen = self.options.splashScreen;
+            const splashScreen = self.options.splashScreen;
             if (splashScreen === null || splashScreen === undefined) {
                 throw new Error('Splash screen plugin is not defined.');
             }
 
-            var data = self.getPreviewData($preview);
+            const data = self.getPreviewData($preview);
             data['media'] = '<img class="js-image splash-screen-image" src="' + data['content_path'] + '">';
 
-            var editMediaContent     = self.options.editMediaContentFactory.create(data, self.options);
-            var $splashScreenContent = editMediaContent.getContent();
+            const editMediaContent = self.options.editMediaContentFactory.create(data, self.options);
+            const $splashScreenContent = editMediaContent.getContent();
 
             splashScreen.content($splashScreenContent);
 
@@ -193,37 +192,37 @@ var FieldState = {
      */
     ImageFormType.prototype.initDropzoneUploader = function (uploadUrl, deleteUrl, fileItem)
     {
-        var self = this;
-        var dropzoneUploader = $(this.ui.controlBar.uploadImage).dropzoneUploader({
-            url:               uploadUrl,
-            deleteUrl:         deleteUrl,
-            previewsContainer: this.ui.uploadPreviewWrapper.selector,
-            previewTemplate:   this.ui.uploadPreviewTemplate,
-            thumbnailWidth:    this.options.thumbnailWidth,
-            thumbnailHeight:   this.options.thumbnailHeight,
-            requestId:         this.options.requestId,
-            maxFiles:          1,
-            chunking:          this.options.chunking,
-            maxFilesize:       this.options.maxFilesize,
-            width:             this.options.width,
-            height:            this.options.height,
-            acceptedFiles:     this.options.acceptedFiles,
-            messages:          this.options.messages
+        const self = this;
+        const dropzoneUploader = $(this.ui.controlBar.uploadImage).dropzoneUploader({
+            url: uploadUrl,
+            deleteUrl: deleteUrl,
+            previewsContainer: this.ui.uploadPreviewWrapper,
+            previewTemplate: this.ui.uploadPreviewTemplate,
+            thumbnailWidth: this.options.thumbnailWidth,
+            thumbnailHeight: this.options.thumbnailHeight,
+            requestId: this.options.requestId,
+            maxFiles: 1,
+            chunking: this.options.chunking,
+            maxFilesize: this.options.maxFilesize,
+            width: this.options.width,
+            height: this.options.height,
+            acceptedFiles: this.options.acceptedFiles,
+            messages: this.options.messages
         });
 
         if (!$.isEmptyObject(fileItem)) {
-            var mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
+            const mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
 
             self.storedFile       = mockFile;
             self.isShowStoredFile = true;
             self.ui.uploadImageWrapper.hide();
 
-            $previewElement = $(mockFile.previewElement);
+            const $previewElement = $(mockFile.previewElement);
             self.setDataForPreview($previewElement, fileItem);
             self.definePreviewListeners(mockFile.previewElement);
         }
 
-        var dropzone = dropzoneUploader.dropzone;
+        const dropzone = dropzoneUploader.dropzone;
 
         // On maxfilesexceeded
         dropzone.on("maxfilesexceeded", function(file) {
@@ -233,7 +232,7 @@ var FieldState = {
 
         // On file added
         dropzone.on("addedfile", function(file) {
-            var $previewElement = $(file.previewElement);
+            const $previewElement = $(file.previewElement);
 
             self.definePreviewListeners(file.previewElement);
 
@@ -248,7 +247,7 @@ var FieldState = {
 
         // On success
         dropzone.on("success", function(file, response) {
-            var $previewElement = $(file.previewElement);
+            const $previewElement = $(file.previewElement);
 
             // Set data for preview
             self.setDataForPreview($previewElement, response);
@@ -313,34 +312,34 @@ var FieldState = {
      */
     ImageCollectionFormType.prototype.initDropzoneUploader = function (uploadUrl, deleteUrl, files)
     {
-        var self = this;
-        var dropzoneUploader = $(this.ui.controlBar.uploadImage).dropzoneUploader({
-            url:               uploadUrl,
-            deleteUrl:         deleteUrl,
-            previewsContainer: this.ui.uploadPreviewWrapper.selector,
-            previewTemplate:   this.ui.uploadPreviewTemplate,
-            requestId:         this.options.requestId,
-            chunking:          this.options.chunking,
-            maxFilesize:       this.options.maxFilesize,
-            width:             this.options.width,
-            height:            this.options.height,
-            acceptedFiles:     this.options.acceptedFiles,
-            messages:          this.options.messages
+        const self = this;
+        const dropzoneUploader = $(this.ui.controlBar.uploadImage).dropzoneUploader({
+            url: uploadUrl,
+            deleteUrl: deleteUrl,
+            previewsContainer: this.ui.uploadPreviewWrapper,
+            previewTemplate: this.ui.uploadPreviewTemplate,
+            requestId: this.options.requestId,
+            chunking: this.options.chunking,
+            maxFilesize: this.options.maxFilesize,
+            width: this.options.width,
+            height: this.options.height,
+            acceptedFiles: this.options.acceptedFiles,
+            messages: this.options.messages
         });
 
         $.each(files, function (key, fileItem) {
-            var mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
+            const mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
 
-            var $previewElement = $(mockFile.previewElement);
+            const $previewElement = $(mockFile.previewElement);
             self.setDataForPreview($previewElement, fileItem);
             self.definePreviewListeners(mockFile.previewElement);
         });
 
-        var dropzone = dropzoneUploader.dropzone;
+        const dropzone = dropzoneUploader.dropzone;
 
         // On file added
         dropzone.on("addedfile", function(file) {
-            var $previewElement = $(file.previewElement);
+            const $previewElement = $(file.previewElement);
 
             self.definePreviewListeners(file.previewElement);
 
@@ -350,7 +349,7 @@ var FieldState = {
         // On success
         dropzone.on("success", function(file, response) {
             // Set data for preview
-            var $previewElement = $(file.previewElement);
+            const $previewElement = $(file.previewElement);
             self.setDataForPreview($previewElement, response);
             self.updateMediasInFieldValue();
 
@@ -372,12 +371,12 @@ var FieldState = {
      */
     ImageCollectionFormType.prototype.updateMediasInFieldValue = function ()
     {
-        var self = this;
-        var $previews = this.ui.uploadPreviewWrapper.find('.js-dropzone-file');
-        var updatedMedias = this.getMediaIdsFromPreviews($previews);
+        const self = this;
+        const $previews = this.ui.uploadPreviewWrapper.find('.js-dropzone-file');
+        const updatedMedias = this.getMediaIdsFromPreviews($previews);
 
         // update field value
-        var fieldValueData = $.parseJSON(this.ui.fieldValue.val());
+        const fieldValueData = $.parseJSON(this.ui.fieldValue.val());
         fieldValueData.medias = updatedMedias;
         this.ui.fieldValue.val(JSON.stringify(fieldValueData));
     };
@@ -456,32 +455,33 @@ var FieldState = {
      */
     BaseVideoFormType.prototype.defineListeners = function ()
     {
-        var self = this;
+        const self = this;
 
         // On upload
         this.ui.controlBar.uploadVideo.on('click', function () {
-            var link = self.ui.uploadInput.val();
+            const link = self.ui.uploadInput.val();
             self.uploadVideo(link);
 
             return false;
         });
 
         // On edit
-        $(document).on('click', this.ui.controlBar.editButton.selector, function(){
-            var $preview = $(this).closest('.js-preview');
+        this.ui.controlBar.editButton.on('click', function(){
+            const $preview = $(this).closest('.js-preview');
 
-            splashScreen = self.options.splashScreen;
+            const splashScreen = self.options.splashScreen;
             if (splashScreen === null || splashScreen === undefined) {
                 throw new Error('Splash screen plugin is not defined.');
             }
 
-            var data = self.getPreviewData($preview);
+            const data = self.getPreviewData($preview);
 
-            var src = '//www.youtube.com/embed/' + data.provider_reference;
-            data['media'] = '<iframe class="js-iframe" width="' + data.width + '" height="' + data.height + '" src="' + src + '" frameborder="0" allowfullscreen></iframe>';
+            const src = '//www.youtube.com/embed/' + data.provider_reference;
+            data['media'] = '<iframe class="js-iframe" width="' + data.width + '" height="' + data.height
+                + '" src="' + src + '" frameborder="0" allowfullscreen></iframe>';
 
-            var editMediaContent     = self.options.editMediaContentFactory.create(data, self.options);
-            var $splashScreenContent = editMediaContent.getContent();
+            const editMediaContent = self.options.editMediaContentFactory.create(data, self.options);
+            const $splashScreenContent = editMediaContent.getContent();
 
             splashScreen.content($splashScreenContent);
 
@@ -494,9 +494,9 @@ var FieldState = {
         });
 
         // On delete
-        $(document).on('click', this.ui.controlBar.removeButton.selector, function(){
-            var preview = $(this).closest('.js-preview');
-            var videoId = preview.data('id');
+        this.ui.controlBar.removeButton.on('click', function(){
+            const preview = $(this).closest('.js-preview');
+            const videoId = preview.data('id');
 
             self.deleteVideo(videoId, preview);
 
@@ -511,7 +511,7 @@ var FieldState = {
      */
     BaseVideoFormType.prototype.addMedias = function (medias)
     {
-        var self = this;
+        const self = this;
 
         $.each(medias, function (key, media) {
             self.addMedia(media);
@@ -532,7 +532,7 @@ var FieldState = {
 
         storeMedia = storeMedia !== undefined ? storeMedia : false;
 
-        var preview = $(this.options.previewTemplate);
+        const preview = $(this.options.previewTemplate);
         preview.find('.js-preview-image').attr('src', media['thumbnail_path']);
 
         this.setDataForPreview(preview, media);
@@ -564,8 +564,8 @@ var FieldState = {
      */
     BaseVideoFormType.prototype.uploadVideo = function (link)
     {
-        var self = this;
-        var uploadUrl = this.options.uploadUrl;
+        const self = this;
+        const uploadUrl = this.options.uploadUrl;
 
         $.ajax({
             url: uploadUrl,
@@ -601,8 +601,8 @@ var FieldState = {
             return;
         }
 
-        var self      = this;
-        var deleteUrl = this.options.deleteUrl;
+        const self = this;
+        const deleteUrl = this.options.deleteUrl;
 
         $.ajax({
             url: deleteUrl,
@@ -827,12 +827,12 @@ var FieldState = {
      */
     VideoCollectionFormType.prototype.updateMediasInFieldValue = function ()
     {
-        var self = this;
-        var $previews = this.ui.previewWrapper.find('.js-preview');
-        var updatedMedias = this.getMediaIdsFromPreviews($previews);
+        const self = this;
+        const $previews = this.ui.previewWrapper.find('.js-preview');
+        const updatedMedias = this.getMediaIdsFromPreviews($previews);
 
         // update field value
-        var fieldValueData = $.parseJSON(this.ui.fieldValue.val());
+        const fieldValueData = $.parseJSON(this.ui.fieldValue.val());
         fieldValueData.medias = updatedMedias;
         this.ui.fieldValue.val(JSON.stringify(fieldValueData));
     };
@@ -854,7 +854,7 @@ var FieldState = {
      *
      * @param {object} options
      * @param {function} callback
-     * @returns {VideoFormType}
+     * @returns {VideoCollectionFormType}
      */
     $.fn.videoCollectionFormType = function (options, callback)
     {
@@ -908,21 +908,21 @@ var FieldState = {
      */
     BaseFileFormType.prototype.definePreviewListeners = function (preview)
     {
-        var self = this;
-        var $preview = $(preview);
+        const self = this;
+        const $preview = $(preview);
 
         // On click edit file
         $preview.find(this.options.editFileSelector).click(function(){
-            var splashScreen = self.options.splashScreen;
+            const splashScreen = self.options.splashScreen;
             if (splashScreen === null || splashScreen === undefined) {
                 throw new Error('Splash screen plugin is not defined.');
             }
 
-            var data = self.getPreviewData($preview);
+            const data = self.getPreviewData($preview);
             data['media'] = '<img class="js-file splash-screen-file" src="' + data['content_path'] + '">';
 
-            var editMediaContent     = self.options.editMediaContentFactory.create(data, self.options);
-            var $splashScreenContent = editMediaContent.getContent();
+            const editMediaContent = self.options.editMediaContentFactory.create(data, self.options);
+            const $splashScreenContent = editMediaContent.getContent();
 
             splashScreen.content($splashScreenContent);
 
@@ -983,30 +983,30 @@ var FieldState = {
      */
     FileFormType.prototype.initDropzoneUploader = function (uploadUrl, deleteUrl, fileItem)
     {
-        var self = this;
-        var dropzoneUploader = $(this.ui.controlBar.uploadFile).dropzoneUploader({
-            url:                uploadUrl,
-            deleteUrl:          deleteUrl,
-            previewsContainer:  this.ui.uploadPreviewWrapper.selector,
-            previewTemplate:    this.ui.uploadPreviewTemplate,
-            requestId:          this.options.requestId,
-            maxFiles:           1,
-            chunking:           this.options.chunking,
-            maxFilesize:        this.options.maxFilesize,
-            width:             this.options.width,
-            height:            this.options.height,
-            acceptedFiles:      this.options.acceptedFiles,
-            messages:           this.options.messages
+        const self = this;
+        const dropzoneUploader = $(this.ui.controlBar.uploadFile).dropzoneUploader({
+            url: uploadUrl,
+            deleteUrl: deleteUrl,
+            previewsContainer: this.ui.uploadPreviewWrapper,
+            previewTemplate: this.ui.uploadPreviewTemplate,
+            requestId: this.options.requestId,
+            maxFiles: 1,
+            chunking: this.options.chunking,
+            maxFilesize: this.options.maxFilesize,
+            width: this.options.width,
+            height: this.options.height,
+            acceptedFiles: this.options.acceptedFiles,
+            messages: this.options.messages
         });
 
         if (!$.isEmptyObject(fileItem)) {
-            var mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
+            const mockFile = dropzoneUploader.addFile(fileItem.id, fileItem.name, fileItem.size, fileItem.thumbnail_path);
 
             self.storedFile       = mockFile;
             self.isShowStoredFile = true;
             self.ui.uploadFileWrapper.hide();
 
-            $previewElement = $(mockFile.previewElement);
+            const $previewElement = $(mockFile.previewElement);
             $previewElement.show();
 
             self.setPreviewName($previewElement, fileItem.name);
@@ -1014,7 +1014,7 @@ var FieldState = {
             self.definePreviewListeners(mockFile.previewElement)
         }
 
-        var dropzone = dropzoneUploader.dropzone;
+        const dropzone = dropzoneUploader.dropzone;
 
         // On maxfilesexceeded
         dropzone.on("maxfilesexceeded", function(file) {
@@ -1024,7 +1024,7 @@ var FieldState = {
 
         // On file added
         dropzone.on("addedfile", function(file) {
-            var $previewElement = $(file.previewElement);
+            const $previewElement = $(file.previewElement);
 
             self.definePreviewListeners(file.previewElement)
 
@@ -1042,7 +1042,7 @@ var FieldState = {
 
         // On success
         dropzone.on("success", function(file, response) {
-            var $previewElement = $(file.previewElement);
+            const $previewElement = $(file.previewElement);
 
             // Set data for preview
             self.setDataForPreview($previewElement, response);
@@ -1117,7 +1117,7 @@ var FieldState = {
             editUrl   : null,
             requestId : null,
             cropper: {
-                ratio: 1
+                ratio: null
             },
             messages : {
                 saveButtonLoadingText: 'Saving...'
@@ -1126,7 +1126,7 @@ var FieldState = {
 
         this.fieldOptions = fieldOptions;
 
-        $template = $(template);
+        const $template = $(template);
         this.template = $template;
 
         this.data = data;
@@ -1192,8 +1192,8 @@ var FieldState = {
      * Define listeners
      */
     EditMediaContent.prototype.initCropper = function (options) {
-        $cropImage = this.ui.media.find('img');
-        var image = $cropImage.get(0);
+        const $cropImage = this.ui.media.find('img');
+        const image = $cropImage.get(0);
 
         if (image) {
             this.cropper = new Cropper(image, {
@@ -1212,10 +1212,10 @@ var FieldState = {
      * Define listeners
      */
     EditMediaContent.prototype.defineListeners = function () {
-        var self = this;
+        const self = this;
 
         this.ui.controlBar.saveButton.on('click', function () {
-            var id = self.data.id;
+            const id = self.data.id;
 
             self.saveChanges(id);
         });
@@ -1225,7 +1225,7 @@ var FieldState = {
      * Save
      */
     EditMediaContent.prototype.saveChanges = function (id) {
-        var self = this;
+        const self = this;
 
         if (!this.options.editUrl) {
             throw new Error('Save URL is not defined.');
@@ -1235,14 +1235,14 @@ var FieldState = {
             throw new Error('Request ID is not defined.');
         }
 
-        var name        = this.ui.form.name.val();
-        var description = this.ui.form.description.val();
+        const name = this.ui.form.name.val();
+        const description = this.ui.form.description.val();
 
-        var data = {
-            id          : id,
-            request_id  : this.options.requestId,
-            name        : name,
-            description : description
+        const data = {
+            id: id,
+            request_id: this.options.requestId,
+            name: name,
+            description: description
         };
 
         if (this.cropper) {
@@ -1309,7 +1309,7 @@ var FieldState = {
      * @param {object} data
      */
     EditMediaContent.prototype.populate = function (data) {
-        var contentSize = this.humanFileSize(data['content_size']);
+        const contentSize = this.humanFileSize(data['content_size']);
 
         this.ui.media.html(data['media']);
         this.ui.form.name.val(data['name']);
@@ -1362,15 +1362,15 @@ var FieldState = {
             return '';
         }
 
-        var thresh = si ? 1000 : 1024;
+        const thresh = si ? 1000 : 1024;
         if (Math.abs(bytes) < thresh) {
             return bytes + ' B';
         }
 
-        var units = si
-            ? ['kB','MB','GB','TB','PB','EB','ZB','YB']
-            : ['KiB','MiB','GiB','TiB','PiB','EiB','ZiB','YiB'];
-        var u = -1;
+        const units = si
+            ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+            : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+        let u = -1;
 
         do {
             bytes /= thresh;

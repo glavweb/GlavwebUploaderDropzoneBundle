@@ -18,23 +18,16 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 
 /**
- * Class AbstractMediaItemType
+ * Class AbstractMediaItemType.
  *
- * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 class AbstractMediaItemType extends AbstractMediaType
 {
-    /**
-     * @param FormBuilderInterface $builder
-     * @param array $options
-     */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->addViewTransformer(new CallbackTransformer(
-            function ($media) {
-                return $media;
-            },
+            static fn ($media) => $media,
 
             function ($mediaDataJson) {
                 $mediaData = json_decode($mediaDataJson, true);
@@ -50,30 +43,26 @@ class AbstractMediaItemType extends AbstractMediaType
         ));
     }
 
-    /**
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    #[\Override]
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         parent::buildView($view, $form, $options);
 
-        $mediaSecuredId  = null;
+        $mediaSecuredId = null;
         $structuredMedia = null;
 
         $media = $view->vars['value'];
         if ($media instanceof MediaInterface) {
             $structuredMedia = $this->mediaStructure->getMediaStructure($media, $options['thumbnail_filter'], true);
-            $mediaSecuredId  = $structuredMedia['id'];
+            $mediaSecuredId = $structuredMedia['id'];
         }
 
         $view->vars['value'] = $structuredMedia;
 
         // Переименовать в value
         $view->vars['mediaData'] = [
-            'media'      => $mediaSecuredId,
-            'request_id' => $view->vars['requestId']
+            'media' => $mediaSecuredId,
+            'request_id' => $view->vars['requestId'],
         ];
     }
 }

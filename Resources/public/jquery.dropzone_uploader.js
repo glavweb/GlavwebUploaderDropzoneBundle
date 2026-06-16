@@ -14,8 +14,8 @@
         return typeof value === 'number' && value % 1 === 0
     }
 
-    function DropzoneUploader(selector, options) {
-        var self = this;
+    function DropzoneUploader($element, options) {
+        const self = this;
 
         options = $.extend({
             url:               null,
@@ -31,11 +31,11 @@
             thumbnailHeight   : 360,
         }, options);
 
-        var acceptedFilesString = $.isArray(options.acceptedFiles) ? options.acceptedFiles.join(',') : options.acceptedFiles;
+        const acceptedFilesString = $.isArray(options.acceptedFiles) ? options.acceptedFiles.join(',') : options.acceptedFiles;
 
-        var dropzone = new Dropzone(selector, $.extend({
+        $element.dropzone($.extend({
             url                  : options.url,
-            previewsContainer    : options.previewsContainer,
+            previewsContainer    : options.previewsContainer.get(0),
             previewTemplate      : options.previewTemplate,
             maxFiles             : options.maxFiles,
             maxFilesize          : options.maxFilesize,
@@ -44,8 +44,8 @@
             thumbnailHeight      : options.thumbnailHeight,
             error: function (file, message, request) {
                 if (file.previewElement) {
-                    var $previewElement = $(file.previewElement)
-                    var errorText = message;
+                    const $previewElement = $(file.previewElement);
+                    let errorText = message;
 
                     if (request) {
                         if (typeof message === "object" && 'error' in message) {
@@ -65,28 +65,30 @@
                     return;
                 }
 
-                var errorMessage = this.options.dictInvalidImageDimension;
+                const errorMessage = this.options.dictInvalidImageDimension;
 
                 file.acceptDimensions = done;
                 file.rejectDimensions = function() {
                     done(errorMessage);
                 };
             }
-        }, options.chunking, options.messages));
+        }, options.chunking, options.messages))
+
+        const dropzone = $element.get(0).dropzone;
 
         this.progressFiles = 0;
 
         dropzone.on("addedfile", function (file, mock) {
-            var $previewElement = $(file.previewElement)
-            var removeLabelText = mock ? this.options.dictRemoveFile : this.options.dictCancelUpload;
+            const $previewElement = $(file.previewElement);
+            const removeLabelText = mock ? this.options.dictRemoveFile : this.options.dictCancelUpload;
 
             $previewElement.find('[data-gwu-remove-label]').text(removeLabelText);
         });
 
         dropzone.on("removedfile", function (file) {
             if (file.response !== undefined && file.response.id !== undefined) {
-                var id  = file.response.id;
-                var url = options.deleteUrl;
+                const id = file.response.id;
+                const url = options.deleteUrl;
 
                 $.post(url, {
                     id:         id,
@@ -106,7 +108,7 @@
         });
 
         dropzone.on("complete", function(file, response) {
-            var $previewElement = $(file.previewElement);
+            const $previewElement = $(file.previewElement);
 
             $previewElement.find('[data-gwu-remove-label]').text(this.options.dictRemoveFile);
 
@@ -118,10 +120,10 @@
                 return;
             }
 
-            var minWidth = options.width && options.width.min;
-            var maxWidth = options.width && options.width.max;
-            var minHeight = options.height && options.height.min;
-            var maxHeight = options.height && options.height.max;
+            const minWidth = options.width && options.width.min;
+            const maxWidth = options.width && options.width.max;
+            const minHeight = options.height && options.height.min;
+            const maxHeight = options.height && options.height.max;
 
             if (file.type === 'image/svg+xml' || (
                 (!isInteger(minWidth) || file.width >= minWidth)
@@ -140,7 +142,7 @@
     }
 
     DropzoneUploader.prototype.addFile = function(id, name, size, thumbnailPath) {
-        var mockFile = {
+        const mockFile = {
             name: name,
             size: size,
             accepted: true,
@@ -164,7 +166,7 @@
 
     // Init plugin
     $.fn.dropzoneUploader = function (options) {
-        return new DropzoneUploader(this.selector, options);
+        return new DropzoneUploader(this, options);
     };
 
 })( jQuery );

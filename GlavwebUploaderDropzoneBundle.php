@@ -14,10 +14,10 @@ namespace Glavweb\UploaderDropzoneBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class GlavwebUploaderDropzoneBundle
+ * Class GlavwebUploaderDropzoneBundle.
  *
- * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 class GlavwebUploaderDropzoneBundle extends Bundle
-{}
+{
+}

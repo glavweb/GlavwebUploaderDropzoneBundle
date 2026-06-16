@@ -27,13 +27,13 @@ public function registerBundles()
 }
 ```
 
-To add resources to a twig confinuration.
+To add resources to a twig configuration.
 
 ```
 twig:
     ...
     form_themes:
-        - 'GlavwebUploaderDropzoneBundle:Form:fields.html.twig'
+        - '@GlavwebUploaderDropzone/Form/fields.html.twig'
 
 ```
 
@@ -45,12 +45,15 @@ To add resources to a twig layout
 
     ...
 
-        <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-                integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-                crossorigin="anonymous"></script>
+        <script
+            src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+            crossorigin="anonymous"></script>
 
         <script src="{{ asset('bundles/glavwebuploaderdropzone/splashscreen/jquery.splashscreen.js') }}"></script>
         <script src="{{ asset('bundles/glavwebuploaderdropzone/dropzone.js') }}"></script>
+        <script src="{{ asset('bundles/glavwebuploaderdropzone/Sortable.js') }}"></script>
+        <script src="{{ asset('bundles/glavwebuploaderdropzone/cropper/cropper.min.js') }}"></script>
         <script src="{{ asset('bundles/glavwebuploaderdropzone/jquery.dropzone_uploader.js') }}"></script>
         <script src="{{ asset('bundles/glavwebuploaderdropzone/fields.js') }}"></script>
 
@@ -64,6 +67,7 @@ To add resources to a twig layout
     ...
     
     <link  href="{{ asset('bundles/glavwebuploaderdropzone/splashscreen/splashscreen.css') }}" rel="stylesheet">
+    <link  href="{{ asset('bundles/glavwebuploaderdropzone/cropper/cropper.min.css') }}" rel="stylesheet">
     <link  href="{{ asset('bundles/glavwebuploaderdropzone/fields.css') }}" rel="stylesheet">
     
     ...

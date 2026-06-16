@@ -16,46 +16,39 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class ImageType
+ * Class ImageType.
  *
- * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 class ImageType extends AbstractMediaItemType
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
+    #[\Override]
+    public function getBlockPrefix(): string
     {
         return 'cms_media_image';
     }
 
-    /**
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    #[\Override]
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
         parent::buildView($view, $form, $options);
 
         $view->vars['thumbnailWidth'] = $options['thumbnail_width'];
         $view->vars['thumbnailHeight'] = $options['thumbnail_height'];
-        $view->vars['cropperRatio'] = $options['cropper_ratio'];
+        $view->vars['cropperRatio'] = $options['cropper_ratio'] ?? null;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    #[\Override]
+    public function configureOptions(OptionsResolver $resolver): void
     {
         parent::configureOptions($resolver);
 
+        $resolver->setDefined([
+            'cropper_ratio',
+        ]);
         $resolver->setDefaults([
-            'thumbnail_width'  => 250,
+            'thumbnail_width' => 250,
             'thumbnail_height' => 250,
-            'cropper_ratio'    => 1
         ]);
 
         $resolver->setAllowedTypes('thumbnail_width', 'int');

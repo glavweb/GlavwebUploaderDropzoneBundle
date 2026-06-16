@@ -15,7 +15,8 @@
         <div class="js-upload-preview-wrapper gwu-upload-preview-wrapper">
             <div class="js-upload-image-wrapper gwu-gallery-box-wr">
                 <div class="gwu-gallery-box">
-                    <img src="{{ asset('bundles/glavwebuploaderdropzone/images/image-upload-blank.jpg') }}" class="gwu-gallery-box__img" alt="{{ 'download_image_button'|trans }}" class="">
+                    <img src="{{ asset('bundles/glavwebuploaderdropzone/images/image-upload-blank.jpg') }}" class="gwu-gallery-box__img"
+                         alt="{{ 'download_image_button'|trans }}" class="">
                     <div class="gwu-gallery-box__overlay gwu-gallery-box__overlay_dark">
                         <div class="gwu-dt">
                             <div class="gwu-dtc">
@@ -30,21 +31,22 @@
         </div>
         {% include '@GlavwebUploaderDropzone/Form/dropzone_preview.html.twig' %}
         {% include '@GlavwebUploaderDropzone/Form/splash-screen-content-template.html.twig' %}
-        <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control" />
+        <input type="hidden" id="{{ id }}" name="{{ full_name }}"
+               value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control" />
     </div>
 
     <script>
         (function ($) {
-            var file = {% if file is not empty %}{{ file|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
-            var $wrapper                = $('#js-image-form-type-{{ id }}');
-            var splashScreen            = $('body').splashScreen();
-            var editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId : "{{ requestId }}",
-                editUrl   : "{{ editUrl }}",
+            const file = {% if file is not empty %}{{ file|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
+            const $wrapper = $('#js-image-form-type-{{ id }}');
+            const splashScreen = $('body').splashScreen();
+            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
+                requestId: "{{ requestId }}",
+                editUrl: "{{ editUrl }}",
                 cropper: {
-                    ratio: {{ cropperRatio }}
+                    ratio: {{ cropperRatio ?? 'null' }}
                 },
-                messages : {
+                messages: {
                     saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
                 }
             });
@@ -90,7 +92,8 @@
 
             <div class="gwu-gallery-box-wr">
                 <div class="gwu-gallery-box">
-                    <img src="{{ asset('bundles/glavwebuploaderdropzone/images/image-upload-blank.jpg') }}" class="gwu-gallery-box__img" alt="{{ 'download_image_button'|trans }}" class="">
+                    <img src="{{ asset('bundles/glavwebuploaderdropzone/images/image-upload-blank.jpg') }}" class="gwu-gallery-box__img"
+                         alt="{{ 'download_image_button'|trans }}" class="">
                     <div class="gwu-gallery-box__overlay gwu-gallery-box__overlay_dark">
                         <div class="gwu-dt">
                             <div class="gwu-dtc">
@@ -106,21 +109,22 @@
         {% include '@GlavwebUploaderDropzone/Form/dropzone_preview.html.twig' %}
         {% include '@GlavwebUploaderDropzone/Form/splash-screen-content-template.html.twig' %}
 
-        <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
+        <input type="hidden" id="{{ id }}" name="{{ full_name }}"
+               value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
     </div>
 
     <script>
         (function ($) {
-            var files = {% if files is not empty %}{{ files|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}[]{% endif %};
-            var $wrapper                = $('#js-image-collection-form-type-{{ id }}');
-            var splashScreen            = $('body').splashScreen();
-            var editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId : "{{ requestId }}",
-                editUrl   : "{{ editUrl }}",
+            const files = {% if files is not empty %}{{ files|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}[]{% endif %};
+            const $wrapper = $('#js-image-collection-form-type-{{ id }}');
+            const splashScreen = $('body').splashScreen();
+            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
+                requestId: "{{ requestId }}",
+                editUrl: "{{ editUrl }}",
                 cropper: {
-                    ratio: {{ cropperRatio }}
+                    ratio: {{ cropperRatio ?? 'null' }}
                 },
-                messages : {
+                messages: {
                     saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
                 }
             });
@@ -141,7 +145,7 @@
                 nameFieldState: {{ nameFieldState }},
                 descriptionFieldState: {{ descriptionFieldState }}
             }, function (self) {
-                var previewWrapper = document.getElementById('js-upload-preview-wrapper-{{ requestId }}');
+                const previewWrapper = document.getElementById('js-upload-preview-wrapper-{{ requestId }}');
 
                 Sortable.create(previewWrapper, {
                     draggable: '.js-dropzone-file',
@@ -162,7 +166,9 @@
         <div class="gwu-input-group">
             <input type="text" class="js-upload-input gwu-control" placeholder="{{ 'download_video_placeholder'|trans }}">
             <div class="gwu-input-group-btn">
-                <button type="button" class="js-control-bar-upload-video gwu-btn gwu-btn-secondary">{{ 'download_video_button'|trans }}</button>
+                <button type="button" class="js-control-bar-upload-video gwu-btn gwu-btn-secondary">
+                    {{ 'download_video_button'|trans }}
+                </button>
             </div>
         </div>
 
@@ -192,18 +198,19 @@
         </div>
         {% include '@GlavwebUploaderDropzone/Form/splash-screen-content-template.html.twig' %}
 
-        <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
+        <input type="hidden" id="{{ id }}" name="{{ full_name }}"
+               value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
     </div>
 
     <script>
         (function ($) {
-            var media = {% if media is not empty %}{{ media|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
-            var $wrapper                = $('#js-video-form-type-{{ id }}');
-            var splashScreen            = $('body').splashScreen();
-            var editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId : "{{ requestId }}",
-                editUrl   : "{{ editUrl }}",
-                messages : {
+            const media = {% if media is not empty %}{{ media|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
+            const $wrapper = $('#js-video-form-type-{{ id }}');
+            const splashScreen = $('body').splashScreen();
+            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
+                requestId: "{{ requestId }}",
+                editUrl: "{{ editUrl }}",
+                messages: {
                     saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
                 }
             });
@@ -236,10 +243,13 @@
         <div class="gwu-input-group">
             <input type="text" class="js-upload-input gwu-control" placeholder="{{ 'download_video_placeholder'|trans }}">
             <div class="gwu-input-group-btn">
-                <button type="button" class="js-control-bar-upload-video gwu-btn gwu-btn-secondary">{{ 'download_video_button'|trans }}</button>
+                <button type="button" class="js-control-bar-upload-video gwu-btn gwu-btn-secondary">
+                    {{ 'download_video_button'|trans }}
+                </button>
             </div>
         </div>
-        <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
+        <input type="hidden" id="{{ id }}" name="{{ full_name }}"
+               value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control"/>
 
         <div class="gwu-gallery-box-list " style="padding-top: 10px;">
             <div class="js-preview-wrapper" id="js-preview-wrapper-{{ requestId }}"></div>
@@ -275,13 +285,13 @@
 
     <script>
         (function ($) {
-            var medias = {% if value is not empty %}{{ value|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}[]{% endif %};
-            var $wrapper                = $('#js-video-collection-form-type-{{ id }}');
-            var splashScreen            = $('body').splashScreen();
-            var editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId : "{{ requestId }}",
-                editUrl   : "{{ editUrl }}",
-                messages : {
+            const medias = {% if value is not empty %}{{ value|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}[]{% endif %};
+            const $wrapper = $('#js-video-collection-form-type-{{ id }}');
+            const splashScreen = $('body').splashScreen();
+            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
+                requestId: "{{ requestId }}",
+                editUrl: "{{ editUrl }}",
+                messages: {
                     saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
                 }
             });
@@ -305,7 +315,7 @@
                 nameFieldState: {{ nameFieldState }},
                 descriptionFieldState: {{ descriptionFieldState }}
             }, function (self) {
-                var previewWrapper = document.getElementById('js-preview-wrapper-{{ requestId }}');
+                const previewWrapper = document.getElementById('js-preview-wrapper-{{ requestId }}');
 
                 Sortable.create(previewWrapper, {
                     draggable: '.js-preview',
@@ -414,18 +424,19 @@
             </div>
         </div>
 
-        <input type="hidden" id="{{ id }}" name="{{ full_name }}" value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control" />
+        <input type="hidden" id="{{ id }}" name="{{ full_name }}"
+               value='{{ mediaData|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}' class="js-field-value gwu-control" />
     </div>
 
     <script>
         (function ($) {
-            var file = {% if file is not empty %}{{ file|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
-            var $wrapper                = $('#js-file-form-type-{{ id }}');
-            var splashScreen            = $('body').splashScreen();
-            var editMediaContentFactory = $wrapper.find('.js-splash-screen-file-template').editMediaContentFactory({
-                requestId : "{{ requestId }}",
-                editUrl   : "{{ editUrl }}",
-                messages : {
+            const file = {% if file is not empty %}{{ file|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
+            const $wrapper = $('#js-file-form-type-{{ id }}');
+            const splashScreen = $('body').splashScreen();
+            const editMediaContentFactory = $wrapper.find('.js-splash-screen-file-template').editMediaContentFactory({
+                requestId: "{{ requestId }}",
+                editUrl: "{{ editUrl }}",
+                messages: {
                     saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
                 }
             });

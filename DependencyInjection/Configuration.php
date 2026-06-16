@@ -15,19 +15,15 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * This is the class that validates and merges configuration from your app/config files
+ * This is the class that validates and merges configuration from your app/config files.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html#cookbook-bundles-extension-config-class}
  *
- * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 class Configuration implements ConfigurationInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getConfigTreeBuilder()
+    public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('glavweb_uploader_dropzone');
         $rootNode = $treeBuilder->getRootNode();
@@ -35,11 +31,11 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('chunking')
-                    ->defaultFalse()->end()
+                    ->defaultTrue()->end()
                 ->scalarNode('force_chunking')
                     ->defaultFalse()->end()
                 ->scalarNode('chunk_size')
-                    ->info('Chunk size in bits')->defaultValue(1000000)->end()
+                    ->info('Chunk size in bits')->defaultValue(5000000)->end()
                 ->scalarNode('parallel_chunk_uploads')
                     ->defaultFalse()->end()
                 ->scalarNode('retry_chunks')
@@ -47,7 +43,6 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('retry_chunks_limit')
                     ->defaultValue(3)->end()
             ->end();
-
 
         return $treeBuilder;
     }

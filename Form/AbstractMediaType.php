@@ -24,113 +24,77 @@ use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Class AbstractMediaType
+ * Class AbstractMediaType.
  *
- * @package Glavweb\UploaderDropzoneBundle
  * @author Andrey Nilov <nilov@glavweb.ru>
  */
 abstract class AbstractMediaType extends AbstractType
 {
     /**
-     * @var array
-     */
-    protected $config;
-
-    /**
-     * @var Router
-     */
-    protected $router;
-
-    /**
-     * @var Registry
-     */
-    protected $doctrine;
-
-    /**
-     * @var UploaderManager
-     */
-    protected $uploaderManager;
-
-    /**
-     * @var MediaStructure
-     */
-    protected $mediaStructure;
-
-    /**
      * AbstractMediaType constructor.
-     *
-     * @param Router          $router
-     * @param Registry        $doctrine
-     * @param UploaderManager $uploaderManager
-     * @param MediaStructure  $mediaStructure
      */
-    public function __construct(array $config, Router $router, Registry $doctrine, UploaderManager $uploaderManager, MediaStructure $mediaStructure)
-    {
-        $this->config          = $config;
-        $this->router          = $router;
-        $this->doctrine        = $doctrine;
-        $this->uploaderManager = $uploaderManager;
-        $this->mediaStructure  = $mediaStructure;
+    public function __construct(
+        /**
+         * @var mixed[]
+         */
+        protected array $config,
+        protected Router $router,
+        protected Registry $doctrine,
+        protected UploaderManager $uploaderManager,
+        protected MediaStructure $mediaStructure,
+    ) {
     }
 
-    /**
-     * @param FormView $view
-     * @param FormInterface $form
-     * @param array $options
-     */
-    public function buildView(FormView $view, FormInterface $form, array $options)
+    public function buildView(FormView $view, FormInterface $form, array $options): void
     {
-        $context               = $options['context'];
-        $contextConfig         = $this->uploaderManager->getContextConfig($context);
-        $descriptionEnabled    = $contextConfig['description_enabled'] ?? true;
+        $context = $options['context'];
+        $contextConfig = $this->uploaderManager->getContextConfig($context);
+        $descriptionEnabled = $contextConfig['description_enabled'] ?? true;
         $descriptionFieldState = $descriptionEnabled ? $options['description_field_state'] : FieldState::HIDDEN;
 
         $requestId = $options['requestId'] ?: $this->generateRequestId($view);
 
-        $view->vars['requestId']     = $requestId;
-        $view->vars['maxFilesize']   = $contextConfig['max_size'] ?? null;
-        $view->vars['width']         = $contextConfig['width'] ?? null;
-        $view->vars['height']        = $contextConfig['height'] ?? null;
+        $view->vars['requestId'] = $requestId;
+        $view->vars['maxFilesize'] = $contextConfig['max_size'] ?? null;
+        $view->vars['width'] = $contextConfig['width'] ?? null;
+        $view->vars['height'] = $contextConfig['height'] ?? null;
         $view->vars['acceptedFiles'] = $contextConfig['allowed_mimetypes'] ?? null;
 
-        $view->vars['nameFieldState']        = $options['name_field_state'];
+        $view->vars['nameFieldState'] = $options['name_field_state'];
         $view->vars['descriptionFieldState'] = $descriptionFieldState;
 
         $view->vars['chunkingOptions'] = [
-            'chunking'             => $options['chunking'],
-            'forceChunking'        => $options['force_chunking'],
-            'chunkSize'            => $options['chunk_size'],
+            'chunking' => $options['chunking'],
+            'forceChunking' => $options['force_chunking'],
+            'chunkSize' => $options['chunk_size'],
             'parallelChunkUploads' => $options['parallel_chunk_uploads'],
-            'retryChunks'          => $options['retry_chunks'],
-            'retryChunksLimit'     => $options['retry_chunks_limit']
+            'retryChunks' => $options['retry_chunks'],
+            'retryChunksLimit' => $options['retry_chunks_limit'],
         ];
 
         $view->vars['uploadUrl'] = $this->router->generate('glavweb_uploader_upload', [
-            'context'          => $context,
-            'thumbnail_filter' => $options['thumbnail_filter']
+            'context' => $context,
+            'thumbnail_filter' => $options['thumbnail_filter'],
         ]);
 
-        $view->vars['deleteUrl']       = $this->router->generate('glavweb_uploader_delete');
-        $view->vars['editUrl']         = $this->router->generate('glavweb_uploader_edit');
+        $view->vars['deleteUrl'] = $this->router->generate('glavweb_uploader_delete');
+        $view->vars['editUrl'] = $this->router->generate('glavweb_uploader_edit');
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function configureOptions(OptionsResolver $resolver)
+    public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'compound'                => false,
-            'requestId'               => null,
-            'context'                 => null,
-            'thumbnail_filter'        => null,
-            'chunking'                => $this->config['chunking'],
-            'force_chunking'          => $this->config['force_chunking'],
-            'chunk_size'              => $this->config['chunk_size'],
-            'parallel_chunk_uploads'  => $this->config['parallel_chunk_uploads'],
-            'retry_chunks'            => $this->config['retry_chunks'],
-            'retry_chunks_limit'      => $this->config['retry_chunks_limit'],
-            'name_field_state'        => FieldState::EDITABLE,
+            'compound' => false,
+            'requestId' => null,
+            'context' => null,
+            'thumbnail_filter' => null,
+            'chunking' => $this->config['chunking'],
+            'force_chunking' => $this->config['force_chunking'],
+            'chunk_size' => $this->config['chunk_size'],
+            'parallel_chunk_uploads' => $this->config['parallel_chunk_uploads'],
+            'retry_chunks' => $this->config['retry_chunks'],
+            'retry_chunks_limit' => $this->config['retry_chunks_limit'],
+            'name_field_state' => FieldState::EDITABLE,
             'description_field_state' => FieldState::EDITABLE,
         ]);
 
@@ -152,17 +116,14 @@ abstract class AbstractMediaType extends AbstractType
         $resolver->setAllowedValues('description_field_state', FieldState::getValues());
     }
 
-    /**
-     * @param FormView $view
-     * @return mixed
-     */
-    private function generateRequestId(FormView $view)
+    private function generateRequestId(FormView $view): string
     {
-        return $view->vars['id'] . '_' . uniqid('', false);
+        return $view->vars['id'].'_'.uniqid('', false);
     }
 
     /**
      * @param string $securedId Media ID with token like as "id-token"
+     *
      * @return MediaInterface|null
      */
     protected function getMedia($securedId)
@@ -172,6 +133,7 @@ abstract class AbstractMediaType extends AbstractType
 
     /**
      * @param array $securedIds Array of media ID with token like as "id-token"
+     *
      * @return MediaInterface[]
      */
     protected function getMedias(array $securedIds)
