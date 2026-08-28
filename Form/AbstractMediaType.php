@@ -126,7 +126,7 @@ abstract class AbstractMediaType extends AbstractType
      *
      * @return MediaInterface|null
      */
-    protected function getMedia($securedId)
+    protected function getMedia(string $securedId)
     {
         return $this->doctrine->getManager()->getRepository(Media::class)->findOneBySecuredId($securedId);
     }
@@ -140,7 +140,9 @@ abstract class AbstractMediaType extends AbstractType
     {
         $medias = [];
         foreach ($securedIds as $securedId) {
-            $medias[] = $this->getMedia($securedId);
+            if ($securedId) {
+                $medias[] = $this->getMedia($securedId);
+            }
         }
 
         return $medias;

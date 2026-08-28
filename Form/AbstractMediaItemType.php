@@ -38,7 +38,13 @@ class AbstractMediaItemType extends AbstractMediaType
                     return $uploadedMedias[0];
                 }
 
-                return $this->getMedia($mediaData['media']);
+                $securedId = $mediaData['media'];
+
+                if (!$securedId) {
+                    return null;
+                }
+
+                return $this->getMedia($securedId);
             }
         ));
     }
