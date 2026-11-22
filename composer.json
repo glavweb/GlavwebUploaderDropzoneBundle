@@ -1,5 +1,6 @@
 {
     "name": "glavweb/uploader-dropzone-bundle",
+    "version": "4.0.0",
     "description": "Symfony GlavwebUploaderDropzoneBundle",
     "authors": [
         {
@@ -16,7 +17,7 @@
         "php": ">=8.4",
         "symfony/http-foundation": "^8.0",
         "symfony/form": "^8.0",
-        "glavweb/uploader-bundle": "^4.0"
+        "glavweb/uploader-bundle": "^5.0"
     },
     "autoload": {
         "exclude-from-classmap": ["ci", "build"],
