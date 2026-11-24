@@ -7,26 +7,16 @@
             dictRemoveFile : 'uploader_dict_remove_file' | trans,
             dictCancelUpload : 'uploader_dict_cancel_upload' | trans,
             dictCancelUploadConfirmation : 'uploader_dict_cancel_upload_confirmation' | trans,
+            dictResponseError : 'uploader_dict_response_error' | trans,
             dictInvalidImageDimension : 'uploader_dict_invalid_image_dimension' | trans
         }
     %}
 
     <div id="js-image-form-type-{{ id }}" class="js-image-form-type">
         <div class="js-upload-preview-wrapper gwu-upload-preview-wrapper">
-            <div class="js-upload-image-wrapper gwu-gallery-box-wr">
-                <div class="gwu-gallery-box">
-                    <img src="{{ asset('bundles/glavwebuploaderdropzone/images/image-upload-blank.jpg') }}" class="gwu-gallery-box__img"
-                         alt="{{ 'download_image_button'|trans }}" class="">
-                    <div class="gwu-gallery-box__overlay gwu-gallery-box__overlay_dark">
-                        <div class="gwu-dt">
-                            <div class="gwu-dtc">
-                                <div class="gwu-gallery-upload-text">
-                                    <div class="js-control-bar-upload-image">{{ 'download_image_button'|trans }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="js-upload-image-wrapper gwu-dropzone">
+                <span class="gwu-dropzone-icon" aria-hidden="true"></span>
+                <span class="js-control-bar-upload-image gwu-dropzone-label">{{ 'download_image_button'|trans }}</span>
             </div>
         </div>
         {% include '@GlavwebUploaderDropzone/Form/dropzone_preview.html.twig' %}
@@ -36,45 +26,31 @@
     </div>
 
     <script>
-        (function ($) {
-            const file = {% if file is not empty %}{{ file|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
-            const $wrapper = $('#js-image-form-type-{{ id }}');
-            const splashScreen = $('body').splashScreen();
-            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId: "{{ requestId }}",
-                editUrl: "{{ editUrl }}",
-                cropper: {
-                    ratio: {{ cropperRatio ?? 'null' }}
-                },
-                messages: {
-                    saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
-                }
-            });
-
-            $wrapper.imageFormType({
-                requestId               : "{{ requestId }}",
-                uploadUrl               : "{{ uploadUrl }}",
-                deleteUrl               : "{{ deleteUrl }}",
-                file                    : file,
-                thumbnailWidth          : {{ thumbnailWidth }},
-                thumbnailHeight         : {{ thumbnailHeight }},
-                splashScreen            : splashScreen,
-                editMediaContentFactory : editMediaContentFactory,
-                messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                maxFilesize: {{ maxFilesize }},
-                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                nameFieldState: {{ nameFieldState }},
-                descriptionFieldState: {{ descriptionFieldState }}
-            });
-        })(jQuery);
+        Gwu.mount(document.getElementById('js-image-form-type-{{ id }}'), {{ {
+            type: 'image',
+            requestId: requestId,
+            uploadUrl: uploadUrl,
+            deleteUrl: deleteUrl,
+            editUrl: editUrl,
+            file: file,
+            thumbnailWidth: thumbnailWidth,
+            thumbnailHeight: thumbnailHeight,
+            cropperRatio: cropperRatio ?? null,
+            maxFilesize: maxFilesize,
+            width: width,
+            height: height,
+            acceptedFiles: acceptedFiles,
+            chunking: chunkingOptions,
+            nameFieldState: nameFieldState,
+            descriptionFieldState: descriptionFieldState,
+            saveButtonLoadingText: 'splash_screen_save_button_loading'|trans,
+            messages: dropzoneDictionary
+        }|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_HEX_TAG'))|raw }});
     </script>
 {% endblock %}
 
 {% block cms_media_image_collection_widget %}
-    {% set files = value is not empty ? value : {} %}
+    {% set files = value is not empty ? value : [] %}
     {% set dropzoneDictionary = {
             dictMaxFilesExceeded : 'uploader_dict_max_files_exceeded' | trans,
             dictInvalidFileType : 'uploader_dict_invalid_file_type' | trans,
@@ -90,20 +66,9 @@
     <div id="js-image-collection-form-type-{{ id }}" class="js-image-collection-form-type">
         <div class="js-upload-preview-wrapper gwu-upload-preview-wrapper" id="js-upload-preview-wrapper-{{ requestId }}">
 
-            <div class="gwu-gallery-box-wr">
-                <div class="gwu-gallery-box">
-                    <img src="{{ asset('bundles/glavwebuploaderdropzone/images/image-upload-blank.jpg') }}" class="gwu-gallery-box__img"
-                         alt="{{ 'download_image_button'|trans }}" class="">
-                    <div class="gwu-gallery-box__overlay gwu-gallery-box__overlay_dark">
-                        <div class="gwu-dt">
-                            <div class="gwu-dtc">
-                                <div class="gwu-gallery-upload-text">
-                                    <div class="js-control-bar-upload-image">{{ 'download_image_button'|trans }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div class="gwu-dropzone">
+                <span class="gwu-dropzone-icon" aria-hidden="true"></span>
+                <span class="js-control-bar-upload-image gwu-dropzone-label">{{ 'download_image_button'|trans }}</span>
             </div>
         </div>
         {% include '@GlavwebUploaderDropzone/Form/dropzone_preview.html.twig' %}
@@ -114,49 +79,25 @@
     </div>
 
     <script>
-        (function ($) {
-            const files = {% if files is not empty %}{{ files|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}[]{% endif %};
-            const $wrapper = $('#js-image-collection-form-type-{{ id }}');
-            const splashScreen = $('body').splashScreen();
-            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId: "{{ requestId }}",
-                editUrl: "{{ editUrl }}",
-                cropper: {
-                    ratio: {{ cropperRatio ?? 'null' }}
-                },
-                messages: {
-                    saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
-                }
-            });
-
-            $wrapper.imageCollectionFormType({
-                requestId               : "{{ requestId }}",
-                uploadUrl               : "{{ uploadUrl }}",
-                deleteUrl               : "{{ deleteUrl }}",
-                files                   : files,
-                splashScreen            : splashScreen,
-                editMediaContentFactory : editMediaContentFactory,
-                messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                maxFilesize: {{ maxFilesize }},
-                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                nameFieldState: {{ nameFieldState }},
-                descriptionFieldState: {{ descriptionFieldState }}
-            }, function (self) {
-                const previewWrapper = document.getElementById('js-upload-preview-wrapper-{{ requestId }}');
-
-                Sortable.create(previewWrapper, {
-                    draggable: '.js-dropzone-file',
-                    onSort: function (event) {
-                        self.updateMediasInFieldValue();
-                    }
-                });
-            });
-        })(jQuery);
+        Gwu.mount(document.getElementById('js-image-collection-form-type-{{ id }}'), {{ {
+            type: 'image-collection',
+            requestId: requestId,
+            uploadUrl: uploadUrl,
+            deleteUrl: deleteUrl,
+            editUrl: editUrl,
+            files: files,
+            cropperRatio: cropperRatio ?? null,
+            maxFilesize: maxFilesize,
+            width: width,
+            height: height,
+            acceptedFiles: acceptedFiles,
+            chunking: chunkingOptions,
+            nameFieldState: nameFieldState,
+            descriptionFieldState: descriptionFieldState,
+            saveButtonLoadingText: 'splash_screen_save_button_loading'|trans,
+            messages: dropzoneDictionary
+        }|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_HEX_TAG'))|raw }});
     </script>
-
 {% endblock %}
 
 {% block cms_media_video_widget %}
@@ -175,22 +116,19 @@
         <div class="gwu-preview-wrapper-wr">
             <div class="js-preview-wrapper"></div>
 
-            {# template #}
             <div class="js-preview-template" style="display: none">
-                <div class="js-preview gwu-gallery-box gwu-gallery-box_video">
-                    <img src="" class="js-preview-image gwu-gallery-box__img" alt="video-preview">
-                    <div class="gwu-gallery-box__overlay">
-                        <div class="gwu-dt">
-                            <div class="gwu-dtc">
-                                <button type="button" class="gwu-btn gwu-btn-video js-control-bar-edit">
-                                    <span class="fa fa-pencil-square-o"></span>
-                                    {{ 'video_edit'|trans }}
-                                </button>
-                                <button type="button" class="gwu-btn gwu-btn-video js-control-bar-delete">
-                                    <span class="fa fa-times"></span>
-                                    {{ 'video_remove'|trans }}
-                                </button>
-                            </div>
+                <div class="js-preview gwu-card">
+                    <div class="gwu-card-media gwu-card-media-video">
+                        <img src="" class="js-preview-image" alt="">
+                        <div class="gwu-card-actions">
+                            <button type="button" class="gwu-btn gwu-btn-overlay js-control-bar-edit">
+                                <span class="gwu-icon gwu-icon-pencil"></span>
+                                {{ 'video_edit'|trans }}
+                            </button>
+                            <button type="button" class="gwu-btn gwu-btn-overlay js-control-bar-delete">
+                                <span class="gwu-icon gwu-icon-times"></span>
+                                {{ 'video_remove'|trans }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -203,42 +141,31 @@
     </div>
 
     <script>
-        (function ($) {
-            const media = {% if media is not empty %}{{ media|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
-            const $wrapper = $('#js-video-form-type-{{ id }}');
-            const splashScreen = $('body').splashScreen();
-            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId: "{{ requestId }}",
-                editUrl: "{{ editUrl }}",
-                messages: {
-                    saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
-                }
-            });
-
-            $wrapper.videoFormType({
-                requestId               : "{{ requestId }}",
-                uploadUrl               : "{{ uploadUrl }}",
-                deleteUrl               : "{{ deleteUrl }}",
-                previewTemplate         : $('.js-preview-template').html(),
-                splashScreen            : splashScreen,
-                editMediaContentFactory : editMediaContentFactory,
-                media                   : media,
-                messages : {
-                    uploadVideoLoadingText: "{{ 'download_video_button_loading'|trans }}"
-                },
-                maxFilesize: {{ maxFilesize }},
-                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                nameFieldState: {{ nameFieldState }},
-                descriptionFieldState: {{ descriptionFieldState }}
-            });
-        })(jQuery);
+        Gwu.mount(document.getElementById('js-video-form-type-{{ id }}'), {{ {
+            type: 'video',
+            requestId: requestId,
+            uploadUrl: uploadUrl,
+            deleteUrl: deleteUrl,
+            editUrl: editUrl,
+            media: media,
+            maxFilesize: maxFilesize,
+            width: width,
+            height: height,
+            acceptedFiles: acceptedFiles,
+            chunking: chunkingOptions,
+            nameFieldState: nameFieldState,
+            descriptionFieldState: descriptionFieldState,
+            saveButtonLoadingText: 'splash_screen_save_button_loading'|trans,
+            messages: {
+                uploadVideoLoadingText: 'download_video_button_loading'|trans
+            }
+        }|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_HEX_TAG'))|raw }});
     </script>
 {% endblock %}
 
 {% block cms_media_video_collection_widget %}
+    {% set medias = value is not empty ? value : [] %}
+
     <div id="js-video-collection-form-type-{{ id }}">
         <div class="gwu-input-group">
             <input type="text" class="js-upload-input gwu-control" placeholder="{{ 'download_video_placeholder'|trans }}">
@@ -254,24 +181,19 @@
         <div class="gwu-gallery-box-list " style="padding-top: 10px;">
             <div class="js-preview-wrapper" id="js-preview-wrapper-{{ requestId }}"></div>
 
-            {# Template #}
             <div class="js-preview-template" style="display: none">
-                <div class="js-preview gwu-gallery-box-wr">
-                    <div class="gwu-gallery-box gwu-gallery-box_video">
-                        <img src="" class="js-preview-image gwu-gallery-box__img" alt="video-preview">
-                        <div class="gwu-gallery-box__overlay">
-                            <div class="gwu-dt">
-                                <div class="gwu-dtc">
-                                    <button type="button" class="gwu-btn gwu-btn-video js-control-bar-edit">
-                                        <span class="fa fa-pencil-square-o"></span>
-                                        {{ 'video_edit'|trans }}
-                                    </button>
-                                    <button type="button" class="gwu-btn gwu-btn-video js-control-bar-delete">
-                                        <span class="fa fa-times"></span>
-                                        {{ 'video_remove'|trans }}
-                                    </button>
-                                </div>
-                            </div>
+                <div class="js-preview gwu-card">
+                    <div class="gwu-card-media gwu-card-media-video">
+                        <img src="" class="js-preview-image" alt="">
+                        <div class="gwu-card-actions">
+                            <button type="button" class="gwu-btn gwu-btn-overlay js-control-bar-edit">
+                                <span class="gwu-icon gwu-icon-pencil"></span>
+                                {{ 'video_edit'|trans }}
+                            </button>
+                            <button type="button" class="gwu-btn gwu-btn-overlay js-control-bar-delete">
+                                <span class="gwu-icon gwu-icon-times"></span>
+                                {{ 'video_remove'|trans }}
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -284,48 +206,25 @@
     </div>
 
     <script>
-        (function ($) {
-            const medias = {% if value is not empty %}{{ value|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}[]{% endif %};
-            const $wrapper = $('#js-video-collection-form-type-{{ id }}');
-            const splashScreen = $('body').splashScreen();
-            const editMediaContentFactory = $wrapper.find('.js-splash-screen-template').editMediaContentFactory({
-                requestId: "{{ requestId }}",
-                editUrl: "{{ editUrl }}",
-                messages: {
-                    saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
-                }
-            });
-
-            $wrapper.videoCollectionFormType({
-                requestId               : "{{ requestId }}",
-                uploadUrl               : "{{ uploadUrl }}",
-                deleteUrl               : "{{ deleteUrl }}",
-                previewTemplate         : $wrapper.find('.js-preview-template').html(),
-                splashScreen            : splashScreen,
-                editMediaContentFactory : editMediaContentFactory,
-                medias                  : medias,
-                messages : {
-                    uploadVideoLoadingText: "{{ 'download_video_button_loading'|trans }}"
-                },
-                maxFilesize: {{ maxFilesize }},
-                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                nameFieldState: {{ nameFieldState }},
-                descriptionFieldState: {{ descriptionFieldState }}
-            }, function (self) {
-                const previewWrapper = document.getElementById('js-preview-wrapper-{{ requestId }}');
-
-                Sortable.create(previewWrapper, {
-                    draggable: '.js-preview',
-                    onSort: function (event) {
-                        self.updateMediasInFieldValue();
-                    }
-                });
-            });
-        })(jQuery);
-
+        Gwu.mount(document.getElementById('js-video-collection-form-type-{{ id }}'), {{ {
+            type: 'video-collection',
+            requestId: requestId,
+            uploadUrl: uploadUrl,
+            deleteUrl: deleteUrl,
+            editUrl: editUrl,
+            medias: medias,
+            maxFilesize: maxFilesize,
+            width: width,
+            height: height,
+            acceptedFiles: acceptedFiles,
+            chunking: chunkingOptions,
+            nameFieldState: nameFieldState,
+            descriptionFieldState: descriptionFieldState,
+            saveButtonLoadingText: 'splash_screen_save_button_loading'|trans,
+            messages: {
+                uploadVideoLoadingText: 'download_video_button_loading'|trans
+            }
+        }|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_HEX_TAG'))|raw }});
     </script>
 {% endblock %}
 
@@ -344,83 +243,64 @@
     %}
 
     <div id="js-file-form-type-{{ id }}" class="js-file-form-type gwu-form-control">
-        <div class="js-upload-file-wrapper gwu-form-inner">
-            <div class="js-control-bar-upload-file gwu-form-upload-file">{{ 'download_file_button'|trans }}</div>
+        <div class="js-upload-file-wrapper gwu-dropzone gwu-dropzone-file">
+            <span class="gwu-dropzone-icon" aria-hidden="true"></span>
+            <span class="js-control-bar-upload-file gwu-dropzone-label">{{ 'download_file_button'|trans }}</span>
         </div>
 
         <div class="js-preview-wrapper" id="js-preview-wrapper-{{ requestId }}"></div>
 
-        {# Dropzone template #}
         <div style="display: none" class="js-preview-template-wrapper">
-            <div class="js-dropzone-file">
-                <!-- This is used as the file preview template -->
-
-                <div class="gwu-form-file">
-                    <span class="js-file-name gwu-form-file-name"></span>
-
-                    <div class="gwu-progressbar">
-                        <div class="gwu-progressbar-indicator" data-dz-uploadprogress></div>
-                        <div class="gwu-progressbar-text">{{ 'download_file_loading'|trans }}</div>
-                    </div>
-
-                    <button type="button" class="gwu-btn js-control-bar-edit-file">
-                        <span class="fa fa-pencil-square-o"></span>
+            <div class="js-dropzone-file gwu-file-row">
+                <span class="js-file-name gwu-file-row-name"></span>
+                <div class="gwu-progressbar">
+                    <div class="gwu-progressbar-indicator" data-gwu-progress></div>
+                    <div class="gwu-progressbar-text">{{ 'download_file_loading'|trans }}</div>
+                </div>
+                <div class="gwu-file-row-actions">
+                    <button type="button" class="gwu-btn gwu-btn-quiet js-control-bar-edit-file gwu-is-hidden">
+                        <span class="gwu-icon gwu-icon-pencil"></span>
                         {{ 'dropzone_preview_edit'|trans }}
                     </button>
-
-                    <button data-dz-remove class="gwu-btn">
-                        <span class="fa fa-times"></span>
+                    <button type="button" data-gwu-remove class="gwu-btn gwu-btn-quiet">
+                        <span class="gwu-icon gwu-icon-times"></span>
                         <span data-gwu-remove-label></span>
                     </button>
-
-                    <div class="gwu-error-message">
-                        <strong class="error text-danger" data-dz-errormessage></strong>
-                    </div>
                 </div>
-
+                <div class="gwu-error-message">
+                    <strong data-gwu-error></strong>
+                </div>
             </div>
         </div>
 
-        {# Splash screen template #}
         <div class="js-splash-screen-file-template" style="display:none;">
-            <div class="js-splash-screen-content gwu-container">
-                <div class="gwu-row">
-                    <div class="gwu-form-content">
-                        <div>
-                            <div class="gwu-form-group">
-                                <label class="gwu-control-label" for="">
-                                    {{ 'splash_screen_name'|trans }}
-                                </label>
-
-                                <div>
-                                    <input data-form-name class="gwu-control" type="text" name="name" value="">
-                                </div>
-                            </div>
-
-                            <div class="gwu-form-group">
-                                <label class="gwu-control-label" for="">
-                                    {{ 'splash_screen_description'|trans }}
-                                </label>
-
-                                <div>
-                                    <textarea data-form-description class="gwu-textarea" name="description" rows="4"></textarea>
-                                </div>
-                            </div>
-                            <table class="gwu-table">
-                                <tr class="gwu-tr">
-                                    <td class="gwu-td">{{ 'splash_screen_media_type'|trans }}: </td>
-                                    <td class="gwu-td"><span data-table-content-type></span></td>
-                                </tr>
-                                <tr class="gwu-tr">
-                                    <td class="gwu-td">{{ 'splash_screen_media_size'|trans }}: </td>
-                                    <td class="gwu-td"><span data-table-content-size></span></td>
-                                </tr>
-                            </table>
-                        </div>
+            <div class="js-splash-screen-content gwu-editor gwu-editor-simple">
+                <div class="gwu-editor-form">
+                    <div class="gwu-form-group" data-form-name-group>
+                        <label class="gwu-control-label">{{ 'splash_screen_name'|trans }}</label>
+                        <input data-form-name-input class="gwu-control" type="text" name="name" value="">
+                        <div data-form-name-text class="gwu-text"></div>
                     </div>
+
+                    <div class="gwu-form-group" data-form-description-group>
+                        <label class="gwu-control-label">{{ 'splash_screen_description'|trans }}</label>
+                        <textarea data-form-description-input class="gwu-textarea" name="description" rows="4"></textarea>
+                        <div data-form-description-text class="gwu-text"></div>
+                    </div>
+
+                    <dl class="gwu-meta">
+                        <div class="gwu-meta-row">
+                            <dt>{{ 'splash_screen_media_type'|trans }}</dt>
+                            <dd data-table-content-type></dd>
+                        </div>
+                        <div class="gwu-meta-row">
+                            <dt>{{ 'splash_screen_media_size'|trans }}</dt>
+                            <dd data-table-content-size></dd>
+                        </div>
+                    </dl>
+
+                    <button data-save-button type="button" class="gwu-btn gwu-btn-success">{{ 'splash_screen_save_button'|trans }}</button>
                 </div>
-                <hr class="glavweb-hr">
-                <button data-save-button type="button" class="gwu-btn gwu-btn-success">{{ 'splash_screen_save_button'|trans }}</button>
             </div>
         </div>
 
@@ -429,34 +309,22 @@
     </div>
 
     <script>
-        (function ($) {
-            const file = {% if file is not empty %}{{ file|json_encode(constant('JSON_UNESCAPED_UNICODE'))|raw }}{% else %}{}{% endif %};
-            const $wrapper = $('#js-file-form-type-{{ id }}');
-            const splashScreen = $('body').splashScreen();
-            const editMediaContentFactory = $wrapper.find('.js-splash-screen-file-template').editMediaContentFactory({
-                requestId: "{{ requestId }}",
-                editUrl: "{{ editUrl }}",
-                messages: {
-                    saveButtonLoadingText: "{{ 'splash_screen_save_button_loading'|trans }}"
-                }
-            });
-
-            $wrapper.fileFormType({
-                requestId               : "{{ requestId }}",
-                uploadUrl               : "{{ uploadUrl }}",
-                deleteUrl               : "{{ deleteUrl }}",
-                file                    : file,
-                splashScreen            : splashScreen,
-                editMediaContentFactory : editMediaContentFactory,
-                messages: {{ dropzoneDictionary | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                maxFilesize: {{ maxFilesize }},
-                width: {{ width | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                height: {{ height | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                acceptedFiles: {{ acceptedFiles | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                chunking: {{ chunkingOptions | json_encode(constant('JSON_UNESCAPED_UNICODE')) | raw }},
-                nameFieldState: {{ nameFieldState }},
-                descriptionFieldState: {{ descriptionFieldState }}
-            });
-        })(jQuery);
+        Gwu.mount(document.getElementById('js-file-form-type-{{ id }}'), {{ {
+            type: 'file',
+            requestId: requestId,
+            uploadUrl: uploadUrl,
+            deleteUrl: deleteUrl,
+            editUrl: editUrl,
+            file: file,
+            maxFilesize: maxFilesize,
+            width: width,
+            height: height,
+            acceptedFiles: acceptedFiles,
+            chunking: chunkingOptions,
+            nameFieldState: nameFieldState,
+            descriptionFieldState: descriptionFieldState,
+            saveButtonLoadingText: 'splash_screen_save_button_loading'|trans,
+            messages: dropzoneDictionary
+        }|json_encode(constant('JSON_UNESCAPED_UNICODE') b-or constant('JSON_HEX_TAG'))|raw }});
     </script>
 {% endblock %}

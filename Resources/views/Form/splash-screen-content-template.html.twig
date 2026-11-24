@@ -1,55 +1,39 @@
 <div class="js-splash-screen-template" style="display:none;">
-    <div class="js-splash-screen-content gwu-container">
-        <div class="gwu-row">
-            <div class="gwu-media-content" id="js-cropper-modal">
-                <div data-media></div>
+    <div class="js-splash-screen-content gwu-editor">
+        <div class="gwu-editor-media" data-media></div>
+        <div class="gwu-editor-form">
+            <div class="gwu-form-group" data-form-name-group>
+                <label class="gwu-control-label">{{ 'splash_screen_name'|trans }}</label>
+                <input data-form-name-input class="gwu-control" type="text" name="name" value="">
+                <div data-form-name-text class="gwu-text"></div>
             </div>
 
-            <div class="gwu-form-content">
-                <div>
-                    <div class="gwu-form-group" data-form-name-group>
-                        <label class="gwu-control-label" for="">
-                            {{ 'splash_screen_name'|trans }}
-                        </label>
+            <div class="gwu-form-group" data-form-description-group>
+                <label class="gwu-control-label">{{ 'splash_screen_description'|trans }}</label>
+                <textarea data-form-description-input class="gwu-textarea" name="description" rows="4"></textarea>
+                <div data-form-description-text class="gwu-text"></div>
+            </div>
 
-                        <div>
-                            <input data-form-name-input class="gwu-control" type="text" name="name" value="">
-                            <div data-form-name-text class="gwu-text"></div>
-                        </div>
-                    </div>
-
-                    <div class="gwu-form-group" data-form-description-group>
-                        <label class="gwu-control-label" for="">
-                            {{ 'splash_screen_description'|trans }}
-                        </label>
-
-                        <div>
-                            <textarea data-form-description class="gwu-textarea" name="description" rows="4"></textarea>
-                            <div data-form-description-text class="gwu-text"></div>
-                        </div>
-                    </div>
-                    <table class="gwu-table">
-                        <tr class="gwu-tr">
-                            <td class="gwu-td">{{ 'splash_screen_media_type'|trans }}: </td>
-                            <td class="gwu-td"><span data-table-content-type></span></td>
-                        </tr>
-                        <tr class="gwu-tr">
-                            <td class="gwu-td">{{ 'splash_screen_media_size'|trans }}: </td>
-                            <td class="gwu-td"><span data-table-content-size></span></td>
-                        </tr>
-                        <tr class="gwu-tr">
-                            <td class="gwu-td">{{ 'splash_screen_media_width'|trans }}: </td>
-                            <td class="gwu-td"><span data-table-width></span></td>
-                        </tr>
-                        <tr class="gwu-tr">
-                            <td class="gwu-td">{{ 'splash_screen_height'|trans }}: </td>
-                            <td class="gwu-td"><span data-table-height></span></td>
-                        </tr>
-                    </table>
+            <dl class="gwu-meta">
+                <div class="gwu-meta-row">
+                    <dt>{{ 'splash_screen_media_type'|trans }}</dt>
+                    <dd data-table-content-type></dd>
                 </div>
-            </div>
+                <div class="gwu-meta-row">
+                    <dt>{{ 'splash_screen_media_size'|trans }}</dt>
+                    <dd data-table-content-size></dd>
+                </div>
+                <div class="gwu-meta-row">
+                    <dt>{{ 'splash_screen_media_width'|trans }}</dt>
+                    <dd data-table-width></dd>
+                </div>
+                <div class="gwu-meta-row">
+                    <dt>{{ 'splash_screen_height'|trans }}</dt>
+                    <dd data-table-height></dd>
+                </div>
+            </dl>
+
+            <button data-save-button type="button" class="gwu-btn gwu-btn-success">{{ 'splash_screen_save_button'|trans }}</button>
         </div>
-        <hr class="glavweb-hr">
-        <button data-save-button type="button" class="gwu-btn gwu-btn-success">{{ 'splash_screen_save_button'|trans }}</button>
     </div>
 </div>

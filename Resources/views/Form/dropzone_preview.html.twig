@@ -1,34 +1,27 @@
 <div style="display: none" class="js-upload-preview-template-wrapper">
-    <div class="js-dropzone-file gwu-gallery-box-wr">
-        <!-- This is used as the file preview template -->
+    <div class="js-dropzone-file gwu-card">
+        <div class="gwu-card-media">
+            <img data-gwu-thumbnail alt="">
+            <div class="gwu-card-actions">
+                <div class="gwu-progressbar">
+                    <div class="gwu-progressbar-indicator" data-gwu-progress></div>
+                    <div class="gwu-progressbar-text">{{ 'download_file_loading'|trans }}</div>
+                </div>
 
-        <div class="gwu-gallery-box">
-            <img data-dz-thumbnail class="gwu-gallery-box__img">
-            <div class="gwu-gallery-box__overlay">
-                <div class="gwu-dt">
-                    <div class="gwu-dtc">
-                        <div class="gwu-progressbar">
-                            <div class="gwu-progressbar-indicator" data-dz-uploadprogress></div>
-                            <div class="gwu-progressbar-text">{{ 'download_file_loading'|trans }}</div>
-                        </div>
+                <button type="button" class="gwu-btn gwu-btn-overlay js-control-bar-edit-image gwu-is-hidden">
+                    <span class="gwu-icon gwu-icon-pencil"></span>
+                    {{ 'dropzone_preview_edit'|trans }}
+                </button>
 
-                        <button type="button" class="gwu-btn gwu-btn-video js-control-bar-edit-image">
-                            <span class="fa fa-pencil-square-o"></span>
-                            {{ 'dropzone_preview_edit'|trans }}
-                        </button>
+                <button type="button" data-gwu-remove class="gwu-btn gwu-btn-overlay">
+                    <span class="gwu-icon gwu-icon-times"></span>
+                    <span data-gwu-remove-label></span>
+                </button>
 
-                        <button data-dz-remove class="gwu-btn gwu-btn-video">
-                            <span class="fa fa-times"></span>
-                            <span data-gwu-remove-label></span>
-                        </button>
-
-                        <div class="gwu-error-message">
-                            <strong class="error text-danger" data-dz-errormessage></strong>
-                        </div>
-                    </div>
+                <div class="gwu-error-message">
+                    <strong data-gwu-error></strong>
                 </div>
             </div>
         </div>
-
     </div>
 </div>

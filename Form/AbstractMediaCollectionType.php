@@ -70,7 +70,7 @@ class AbstractMediaCollectionType extends AbstractMediaType
             $medias = $inValue;
         }
 
-        $structuredMedias = $this->mediaStructure->getStructure($medias, $options['thumbnail_filter'], true);
+        $structuredMedias = $this->mediaStructure->getStructure($medias, $options['thumbnail_filter'], true, true);
         $mediaSecuredIds = array_map(static fn (array $structuredMedia) => $structuredMedia['id'], $structuredMedias);
 
         $view->vars['value'] = $structuredMedias;
