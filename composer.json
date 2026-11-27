@@ -20,7 +20,17 @@
         "glavweb/uploader-bundle": "^5.0"
     },
     "autoload": {
-        "exclude-from-classmap": ["ci", "build"],
-        "psr-4": { "Glavweb\\UploaderDropzoneBundle\\": "" }
+        "exclude-from-classmap": [
+            "ci",
+            "build"
+        ],
+        "psr-4": {
+            "Glavweb\\UploaderDropzoneBundle\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "4.0.x-dev"
+        }
     }
 }
